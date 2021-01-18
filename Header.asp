@@ -10,6 +10,7 @@
             padding: 0px;
             text-decoration: none;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .banner{
