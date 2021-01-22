@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="CSS/bootstrap.css">
     <title>Document</title>
     <style>
         * {
@@ -21,7 +20,7 @@
 
         .banner img {
             width: 100%;
-            height: 600px;
+            height: 300px;
         }
 
         /*-----------Navigation Bar ----------*/
