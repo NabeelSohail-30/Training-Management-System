@@ -26,15 +26,34 @@
         }
 
         .add-new {
-            background-color: rgb(29, 21, 172);
-            padding: 12px 18px;
+            background-color: whitesmoke;
+            padding: 10px 22px;
             font-size: 22px;
-            color: whitesmoke;
+            border: 0px;
+            outline: 0px;
+            border-radius: 20px;
+            color: black;
             font-weight: bold;
         }
 
+        .btn a:hover {
+            background-color: rgb(0, 140, 255);
+            padding: 10px 22px;
+            font-size: 22px;
+            border: 0px;
+            outline: 0px;
+            border-radius: 20px;
+            color: whitesmoke;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .add-new img {
+            margin-bottom: 3px;
+        }
+
         .search-bar {
-            margin-top: 20px;
+            margin-bottom: 28px;
             padding: 8px;
             font-size: 16px;
             border: 1px solid white;
@@ -97,27 +116,25 @@
     <main>
         <section class="action">
             <div>
-                <a href="#" class="add-new">New Student</a>
-            </div>
-            <div>
                 <form class="search" action="#">
                     <div>
                         <input type="search" class="search-bar" placeholder="Search By GR Number">
-                        <input type="submit" name="" id="" class="search-btn" value="Search">
                     </div>
                     <div>
                         <input type="search" class="search-bar" placeholder="Search By First Name">
-                        <input type="submit" name="" id="" class="search-btn" value="Search">
                     </div>
                     <div>
                         <input type="search" class="search-bar" placeholder="Search By Last Name">
-                        <input type="submit" name="" id="" class="search-btn" value="Search">
                     </div>
                     <div>
                         <input type="search" class="search-bar" placeholder="Search By Father Name">
-                        <input type="submit" name="" id="" class="search-btn" value="Search">
                     </div>
+                    <input type="submit" name="" id="" class="search-btn" value="Search">
                 </form>
+            </div>
+            <div class="btn">
+                <a href="#" class="add-new" title="Add New Student Profile"><img src="Images/Add.svg" alt="" title="Add New Student Profile"
+                        width="26px" height="26px"> New Student</a>
             </div>
         </section>
 
@@ -139,7 +156,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
                     <tr>
                         <td>6969</td>
                         <td>Muhammad</td>
