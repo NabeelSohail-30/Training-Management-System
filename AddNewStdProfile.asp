@@ -82,9 +82,8 @@
     </style>
 
 </head>
-<script>
 
-</script>
+
 
 <body>
     <header>
@@ -114,7 +113,7 @@
                         <div class="form-group">
                             <label for="" class="input-heading">Student GR Number</label>
                             <br>
-                            <input type="text" class="form-control" name="FormStdGrNum" id="GrNum">
+                            <input type="text" class="form-control" name="FormStdGrNum" id="GrNum" disabled>
                         </div>
                     </div>
 
@@ -122,14 +121,14 @@
                         <div class="form-group">
                             <label for="" class="input-heading">Student NIC Number</label>
                             <br>
-                            <input type="text" class="form-control" name="FormStdNIC" id="StdNic" onblur="NICVal(this);"
-                                required>
+                            <input type="text" class="form-control" name="FormStdNIC" id="StdNic"
+                                onblur="NICValidate(this);">
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-6"></div>
-                    <div class="col-6"></div>
+                    <div class="col-6"><span id="NIC"></span></div>
                 </div>
 
                 <br>
@@ -139,8 +138,7 @@
                         <div class="form-group">
                             <label for="" class="input-heading">Student First Name</label>
                             <br>
-                            <input type="text" class="form-control" name="FormStdFirstName" id="FirstName"
-                                onblur="FirstNameVal(this);" required>
+                            <input type="text" class="form-control" name="FormStdFirstName" id="FirstName" onblur="FirstNameValidate(this);">
                         </div>
                     </div>
 
@@ -148,7 +146,7 @@
                         <div class="form-group">
                             <label for="" class="input-heading">Student Middle Name</label>
                             <br>
-                            <input type="text" class="form-control" name="FormStdMidName" id="MidName">
+                            <input type="text" class="form-control" name="FormStdMidName" id="MidName" onblur="MidNameValidate(this);">
                         </div>
                     </div>
 
@@ -156,14 +154,14 @@
                         <div class="form-group">
                             <label for="" class="input-heading">Student Last Name</label>
                             <br>
-                            <input type="text" class="form-control" name="FormStdLastName" id="LastName">
+                            <input type="text" class="form-control" name="FormStdLastName" id="LastName" onblur="LastNameValidate(this);">
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-4"></div>
-                    <div class="col-4"></div>
-                    <div class="col-4"></div>
+                    <div class="col-4"><span id="FirstNameError"></span></div>
+                    <div class="col-4"><span id="MidNameError"></span></div>
+                    <div class="col-4"><span id="LastNameError"></span></div>
                 </div>
 
                 <div class="row">
@@ -171,7 +169,7 @@
                         <div class="form-group">
                             <label for="" class="input-heading">Student Date of Birth</label>
                             <br>
-                            <input type="date" class="form-control" name="FormStdDob" id="Dob">
+                            <input type="date" class="form-control" name="FormStdDob" id="Dob" onblur="ValidateDob(this);">
                         </div>
                     </div>
 
@@ -179,7 +177,8 @@
                         <div class="form-group">
                             <label for="" class="input-heading">Student Nationality</label>
                             <br>
-                            <select name="FormStdNationalityId" id="" class="form-control" id="Nationality">
+                            <select name="FormStdNationalityId" id="" class="form-control" id="Nationality" onblur="ValidateNationality(this);">
+                                <option value="-1">Select Nationality</option>
                                 <%
                                     Dim RSNationality
                                     Set RSNationality = Server.CreateObject("ADODB.RecordSet")
@@ -202,8 +201,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6"></div>
-                    <div class="col-6"></div>
+                    <div class="col-6"><span id="DateError"></span></div>
+                    <div class="col-6"><span id="NationalityError"></span></div>
                 </div>
 
                 <div class="row">
@@ -562,5 +561,6 @@
         </div>
     </div>
 </body>
+<script src="Scripts/AddNewStd.js"></script>
 
 </html>
