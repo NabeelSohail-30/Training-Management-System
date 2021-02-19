@@ -19,8 +19,8 @@
         }
 
         .loginbox {
-            width: 340px;
-            height: 420px;
+            width: 420px;
+            height: 460px;
             top: 50%;
             left: 50%;
             background-color: whitesmoke;
@@ -52,7 +52,7 @@
             font-weight: bold;
         }
 
-        .loginbox input[type="submit"]{
+        .loginbox input[type="submit"] {
             width: 100%;
             margin-bottom: 20px;
             border: none;
@@ -66,7 +66,7 @@
             margin-top: 10px;
         }
 
-        .loginbox input[type="submit"]:hover{
+        .loginbox input[type="submit"]:hover {
             width: 100%;
             margin-bottom: 20px;
             border: none;
@@ -105,11 +105,24 @@
                 <h1>Login</h1>
             </div>
 
-            <form action="#">
-                <label for="">User Email</label>
-                <input type="email" name="" id="" placeholder="Enter Login Email">
-                <label for="">Password</label>
-                <input type="password" name="" id="" placeholder="Enter Password">
+            <form action="ValidateLogin.asp" method="POST">
+                <div>
+                    <label for="">User Email</label>
+                    <input type="email" name="TxtUserEmail" id="" placeholder="Enter Login Email" value="
+                        <% response.write(Session("SUserEmail")) %>"">
+                    <span style=" color: red; font-size:medium; text-align: center;"><% response.Write(Session("SErrorEmail")) %></span>
+                </div>
+
+                <div>
+                    <label for="">Password</label>
+                    <input type="password" name="TxtUserPass" id="TxtPassword" placeholder="Enter Password">
+                    <span style=" color: red; font-size:medium; text-align: center;"><% response.Write(Session("SErrorPass")) %></span>
+                </div>
+
+                <div>
+                    <span style="color: red; font-size:medium;"><% response.Write(Session("SErrorInvalid")) %></span>
+                    <span style="color: red; font-size:medium;"><% response.Write(Session("STimeoutError")) %></span>
+                </div>
                 <input type="submit" value="Login">
             </form>
         </div>
