@@ -1,3 +1,5 @@
+var IsValidationPassed = true;
+
 function IsNull(TargetElement) {
     if (TargetElement == "" || TargetElement.length == 0 || TargetElement == undefined) {
         return true;
@@ -26,8 +28,20 @@ function IsAlphabet(string) {
     }
 }
 
+function IsNumber(string) {
+    var ErrorFound = false;
+    for (var i = 0; i < string.length; i++) {
+        if (isNaN(string.charAt(i)) == true) {
+            ErrorFound = true;
+            break;
+        }
+    }
 
-function NICValidate(TargetElement) {
+    return ErrorFound;
+}
+
+
+function NICValidate(TargetElement, TargetError) {
     var TargetValue = TargetElement.value;
     var ErrorNIC = "";
 
@@ -41,7 +55,7 @@ function NICValidate(TargetElement) {
     } else if (TargetValue.substr(6, 1) != '-' || TargetValue.substr(13, 1) != '-') {
         ErrorNIC = 'Invalid NIC Format';
     } else if (isNaN(TargetValue.substr(14, 1)) != false) {
-        ErrorNIC = 'Lat Character is not a Number, NIC cannot contain Non Numeric Character';
+        ErrorNIC = 'Last Character is not a Number, NIC cannot contain Non Numeric Character';
     } else {
         for (var i = 0; i < 6; i++) {
             if (isNaN(TargetValue.charAt(i))) {
@@ -60,10 +74,15 @@ function NICValidate(TargetElement) {
         }
     }
     //window.alert(ErrorNIC);
-    document.getElementById("NIC").innerText = ErrorNIC;
+    if (ErrorNIC != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        TargetError.innerText = ErrorNIC;
+    }
+
 }
 
-function FirstNameValidate(TargetElement) {
+function FirstNameValidate(TargetElement, TargetError) {
     //window.alert(89);
     var TargetValue = TargetElement.value;
     var ErrorFirstName = "";
@@ -76,10 +95,15 @@ function FirstNameValidate(TargetElement) {
         ErrorFirstName = 'Invalid Character Found in First Name';
     }
     //window.alert(ErrorName);
-    document.getElementById("FirstNameError").innerText = ErrorFirstName;
+    if (ErrorFirstName != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        TargetError.innerText = ErrorFirstName;
+    }
+
 }
 
-function MidNameValidate(TargetElement) {
+function MidNameValidate(TargetElement, TargetError) {
     //window.alert(89);
     var TargetValue = TargetElement.value;
     var ErrorMidName = "";
@@ -90,10 +114,14 @@ function MidNameValidate(TargetElement) {
         ErrorMidName = 'Invalid Character Found in Mid Name';
     }
     //window.alert(ErrorMidName);
-    document.getElementById("MidNameError").innerText = ErrorMidName;
+    if (ErrorMidName != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        TargetError.innerText = ErrorMidName;
+    }
 }
 
-function LastNameValidate(TargetElement) {
+function LastNameValidate(TargetElement, TargetError) {
     //window.alert(89);
     var TargetValue = TargetElement.value;
     var ErrorLastName = "";
@@ -106,7 +134,11 @@ function LastNameValidate(TargetElement) {
         ErrorLastName = 'Invalid Character Found in Last Name';
     }
     //window.alert(ErrorLastName);
-    document.getElementById("LastNameError").innerText = ErrorLastName;
+    if (ErrorLastName != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        TargetError.innerText = ErrorLastName;
+    }
 }
 
 function ValidateDob(TargetElement) {
@@ -117,7 +149,11 @@ function ValidateDob(TargetElement) {
         ErrorDateOfBirth = 'Date of Birth cannot be left NULL';
     }
 
-    document.getElementById("DateError").innerText = ErrorDateOfBirth;
+    if (ErrorDateOfBirth != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        document.getElementById("DateError").innerText = ErrorDateOfBirth;
+    }
 }
 
 function ValidateNationality(TargetElement) {
@@ -128,5 +164,194 @@ function ValidateNationality(TargetElement) {
         ErrorNationality = 'No Nationality Selected';
     }
 
-    document.getElementById("NationalityError").innerText = ErrorNationality;
+    if (ErrorNationality != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        document.getElementById("NationalityError").innerText = ErrorNationality;
+    }
+}
+
+function ValidatePOB(TargetElement) {
+    var TargetValue = TargetElement.value;
+    var ErrorPob = "";
+
+    if (IsNull(TargetValue)) {
+        ErrorPob = 'Place of Birth cannot be NULL';
+    } else if (TargetValue.length > 25) {
+        ErrorPob = 'Maximum Length for Place of Birth is 25 characters';
+    } else if (IsAlphabet(TargetValue) == true) {
+        ErrorPob = 'Invalid Character Found in Place of Birth';
+    }
+    //window.alert(ErrorLastName);
+    if (ErrorPob != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        document.getElementById("PobError").innerText = ErrorPob;
+    }
+}
+
+function ValidateReligion(TargetElement) {
+    var TargetValue = TargetElement.value;
+    var ErrorReligion = "";
+
+    if (TargetValue == -1) {
+        ErrorReligion = 'No Religion Selected';
+    }
+
+    if (ErrorReligion != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        document.getElementById("ReligionError").innerText = ErrorReligion;
+    }
+}
+
+function ValidateGender(TargetElement) {
+    var TargetValue = TargetElement.value;
+    var ErrorGender = "";
+
+    if (TargetValue == -1) {
+        ErrorGender = 'No Gender Selected';
+    }
+
+    if (ErrorGender != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        document.getElementById("GenderError").innerText = ErrorGender;
+    }
+}
+
+function ValidateMaritalSt(TargetElement) {
+    var TargetValue = TargetElement.value;
+    var ErrorMaritalSt = "";
+
+    if (TargetValue == -1) {
+        ErrorMaritalSt = 'No Marital Status Selected';
+    }
+
+    if (ErrorMaritalSt != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        document.getElementById("MaritalStError").innerText = ErrorMaritalSt;
+    }
+}
+
+function ValidateMobileNumber(TargetElement, TargetError) {
+    var TargetValue = TargetElement.value;
+    var ErrorMobNum = "";
+
+    if (IsNull(TargetValue)) {
+        ErrorMobNum = 'Mobile Number cannot be left NULL';
+    } else if (TargetValue.length > 20) {
+        ErrorMobNum = 'Max Length for Mobile Number is 20';
+    } else if (IsNumber(TargetValue) == true) {
+        ErrorMobNum = 'Invalid Character Found in Mobile Number';
+    }
+
+    if (ErrorMobNum != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        TargetError.innerText = ErrorMobNum;
+    }
+}
+
+function ValidateEmail(TargetElement, TargetError) {
+    var TargetValue = TargetElement.value;
+    var ErrorEmail = "";
+
+    if (IsNull(TargetValue)) {
+        ErrorEmail = 'Email cannot be left NULL';
+    } else if (TargetValue.length > 30) {
+        ErrorEmail = 'Max Length for Email is 30';
+    }
+
+    if (ErrorEmail != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        TargetError.innerText = ErrorEmail;
+    }
+}
+
+function ValidateHomeTelephone(TargetElement) {
+    var TargetValue = TargetElement.value;
+    var ErrorHomeTel = "";
+
+    if (IsNull(TargetValue)) {
+        ErrorHomeTel = 'Home Telephone Number cannot be left NULL';
+    } else if (TargetValue.length > 20) {
+        ErrorHomeTel = 'Max Length for Home Telephone Number is 20';
+    } else if (IsNumber(TargetValue) == true) {
+        ErrorHomeTel = 'Invalid Character Found in Home Telephone Number';
+    }
+
+    if (ErrorHomeTel != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        document.getElementById("HomePhoneError").innerText = ErrorHomeTel;
+    }
+}
+
+function ValidateCompanyName(TargetElement, TargetError) {
+    var TargetValue = TargetElement.value;
+    var ErrorCompanyName = "";
+
+    if (TargetValue.length > 50) {
+        ErrorCompanyName = 'Max Length for Company Name is 20';
+    }
+
+    if (ErrorCompanyName != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        TargetError.innerText = ErrorCompanyName;
+    }
+}
+
+function ValidateWorkPhone(TargetElement, TargetError) {
+    var TargetValue = TargetElement.value;
+    var ErrorWorkPhone = "";
+
+
+    if (TargetValue.length > 20) {
+        ErrorWorkPhone = 'Max Length for Work Phone Number is 20';
+    } else if (IsNumber(TargetValue) == true) {
+        ErrorWorkPhone = 'Invalid Character Found in Work Phone Number';
+    }
+
+    if (ErrorWorkPhone != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        TargetError.innerText = ErrorWorkPhone;
+    }
+}
+
+function FatherNameValidate(TargetElement) {
+    //window.alert(89);
+    var TargetValue = TargetElement.value;
+    var FatherFirstName = "";
+
+    if (IsNull(TargetValue)) {
+        FatherFirstName = 'First Name cannot be NULL';
+    } else if (TargetValue.length > 15) {
+        FatherFirstName = 'Maximum Length for First Name is 15 characters';
+    } else if (IsAlphabet(TargetValue) == true) {
+        FatherFirstName = 'Invalid Character Found in First Name';
+    }
+    //window.alert(ErrorName);
+    if (FatherFirstName != "") {
+        IsValidationPassed = false;
+        TargetElement.style.borderColor = 'red';
+        document.getElementById("FatherNameError").innerText = FatherFirstName;
+    }
+
+}
+
+function FormSubmit() {
+    /*
+    if (IsValidationPassed == true) {
+        return true;
+    } else {
+        return false;
+    }*/
+    //Method 1
+    //Above condition can be achieved using the following statement 
+    return IsValidationPassed;
 }
