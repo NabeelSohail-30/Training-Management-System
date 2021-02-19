@@ -1,3 +1,6 @@
+<!--#include file=OpenDbConn.asp-->
+<!--#include file=ReValidateLogin.asp-->
+<!--#include file=AppSetting.asp-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -108,6 +111,13 @@
     </style>
 </head>
 
+<%
+    call OpenDbConn()
+    Dim RSStdDetail
+    Set RSStdDetail = Server.CreateObject("ADODB.RecordSet")
+    RSStdDetail.Open "SELECT StdGrNumber, StdFirstName, StdLastName, FatherName, StdMobileNumber, StdEmailAddress FROM StudentDetail ORDER BY StudentId DESC", conn 
+%>
+
 <body>
     <header>
         <!--#include file=Header.asp-->
@@ -133,7 +143,7 @@
                 </form>
             </div>
             <div class="btn">
-                <a href="#" class="add-new" title="Add New Student Profile"><img src="Images/Add.svg" alt="" title="Add New Student Profile"
+                <a href="AddNewStdProfile.asp" class="add-new" title="Add New Student Profile"><img src="Images/Add.svg" alt="" title="Add New Student Profile"
                         width="26px" height="26px"> New Student</a>
             </div>
         </section>
@@ -156,14 +166,16 @@
                     </tr>
                 </thead>
                 <tbody>
-
+                    <%
+                        do while RSStdDetail.EOF=false
+                    %>
                     <tr>
-                        <td>6969</td>
-                        <td>Muhammad</td>
-                        <td>Nabeel</td>
-                        <td>Sohail</td>
-                        <td>0345-3628868</td>
-                        <td>sheikhnabeel365@gmail.com</td>
+                        <td><% response.Write(RSStdDetail("StdGrNumber")) %></td>
+                        <td><% response.Write(RSStdDetail("StdFirstName")) %></td>
+                        <td><% response.Write(RSStdDetail("StdLastName")) %></td>
+                        <td><% response.Write(RSStdDetail("FatherName")) %></td>
+                        <td><% response.Write(RSStdDetail("StdMobileNumber")) %></td>
+                        <td><% response.Write(RSStdDetail("StdEmailAddress")) %></td>
                         <td class="link-btn">
                             <a href="#" class="icon">
                                 <img src="Images/profile.png" alt="" title="View Profile">
@@ -190,72 +202,10 @@
                             </a>
                         </td>
                     </tr>
-                    <tr>
-                        <td>6969</td>
-                        <td>Muhammad</td>
-                        <td>Nabeel</td>
-                        <td>Sohail</td>
-                        <td>0345-3628868</td>
-                        <td>sheikhnabeel365@gmail.com</td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="View Profile">
-                            </a>
-                        </td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="Edit Profile">
-                            </a>
-                        </td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="Academic Qualifications">
-                            </a>
-                        </td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="Technical Qualifications">
-                            </a>
-                        </td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="Work Experience">
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>6969</td>
-                        <td>Muhammad</td>
-                        <td>Nabeel</td>
-                        <td>Sohail</td>
-                        <td>0345-3628868</td>
-                        <td>sheikhnabeel365@gmail.com</td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="View Profile">
-                            </a>
-                        </td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="Edit Profile">
-                            </a>
-                        </td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="Academic Qualifications">
-                            </a>
-                        </td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="Technical Qualifications">
-                            </a>
-                        </td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="Work Experience">
-                            </a>
-                        </td>
-                    </tr>
+                    <%
+                        RSStdDetail.MoveNext
+                        loop     
+                    %>
                 </tbody>
             </table>
         </section>
