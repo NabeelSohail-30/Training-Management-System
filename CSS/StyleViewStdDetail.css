@@ -1,0 +1,7 @@
+.wrapper {
+    width: 70%;
+    height: max-content;
+    background-color: whitesmoke;
+    color: black;
+    margin: 24px auto;
+}
