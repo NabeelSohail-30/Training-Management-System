@@ -8,114 +8,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/bootstrap.css">
+    <link rel="stylesheet" href="CSS/GlobalStyle.css">
+    <link rel="stylesheet" href="css/StyleStdProfile.css">
     <title>Students Detail</title>
-    <style>
-        * {
-            margin: 0px;
-            padding: 0px;
-            text-decoration: none;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
-        }
-
-        body {
-            background-color: lightgray;
-        }
-
-        .action {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .add-new {
-            background-color: whitesmoke;
-            padding: 10px 22px;
-            font-size: 22px;
-            border: 0px;
-            outline: 0px;
-            border-radius: 20px;
-            color: black;
-            font-weight: bold;
-        }
-
-        .btn a:hover {
-            background-color: rgb(0, 140, 255);
-            padding: 10px 22px;
-            font-size: 22px;
-            border: 0px;
-            outline: 0px;
-            border-radius: 20px;
-            color: whitesmoke;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .add-new img {
-            margin-bottom: 3px;
-        }
-
-        .search-bar {
-            margin-bottom: 28px;
-            padding: 8px;
-            font-size: 16px;
-            border: 1px solid white;
-            border-radius: 10px;
-            width: 200px;
-        }
-
-        form {
-            margin-top: 20px;
-        }
-
-        form div {
-            display: inline-block;
-            margin: 0px 20px;
-        }
-
-        .search-btn {
-            background-color: rgb(29, 21, 172);
-            padding: 8px 10px;
-            font-size: 16px;
-            color: whitesmoke;
-            font-weight: 600;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .student-profile-list {
-            margin-top: 20px;
-            margin-left: 10px;
-            margin-right: 10px;
-        }
-
-        table {
-            border: 2px solid black;
-            background-color: whitesmoke;
-            color: black;
-        }
-
-        .table {
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .icon img {
-            width: 26px;
-            height: 26px;
-        }
-
-        .link-btn {
-            text-align: center;
-        }
-    </style>
 </head>
 
 <%
-    call OpenDbConn()
-    Dim RSStdDetail
-    Set RSStdDetail = Server.CreateObject("ADODB.RecordSet")
-    RSStdDetail.Open "SELECT StdGrNumber, StdFirstName, StdLastName, FatherName, StdMobileNumber, StdEmailAddress FROM StudentDetail ORDER BY StudentId DESC", conn 
+    'OpenDb, OpenRS
+        call OpenDbConn()
+        Dim RSStdDetail
+        Dim RSCount
+        Dim StdId
+
+        Set RSStdDetail = Server.CreateObject("ADODB.RecordSet")
+        Set RSCount = Server.CreateObject("ADODB.RecordSet")
+
+        RSStdDetail.Open "SELECT StudentId, StdGrNumber, StdFirstName, StdLastName, StdNICNumber, FatherName, StdMobileNumber, StdEmailAddress FROM StudentDetail ORDER BY StudentId DESC", conn
+        RSCount.Open "SELECT COUNT(StudentId) AS TotalRecords FROM StudentDetail", conn
+    'end
+
+    'Paging
+        Dim RecNumber
+        Dim PageNumber
+        Dim SkipRec
+        Dim LastPage
+
+        TotalRec = RSCount("TotalRecords")
+
+        If Request.QueryString("QsPageNumber")="" then
+            PageNumber = 1
+            SkipRec=0
+        else
+            PageNumber = Cint(request.QueryString("QsPageNumber"))
+            SkipRec = (PageNumber*RecPerPage)-RecPerPage
+        End if
+
+        If RSCount.EOF  or RSCount("TotalRecords")=1 then
+            LastPage = 0
+        else
+            LastPage = Cstr((RSCount("TotalRecords")/RecPerPage))
+
+            If InStr(LastPage,".") > 1 then
+                LastPage = cint(LEFT(LastPage,InStr(LastPage,".")-1)) + 1
+            end if
+        End If
+    'end
 %>
 
 <body>
@@ -152,64 +89,89 @@
             <table class="table table-bordered table-hover">
                 <thead class="thead-light">
                     <tr>
-                        <th style="width: 6%;">GR Number</th>
-                        <th style="width: 14%;">First Name</th>
-                        <th style="width: 14%;">Last Name</th>
-                        <th style="width: 12%;">Father Name</th>
-                        <th style="width: 10%;">Phone Number</th>
-                        <th style="width: 18%;">Email Address</th>
-                        <th style="width: 4%;"></th>
-                        <th style="width: 4%;"></th>
-                        <th style="width: 4%;"></th>
-                        <th style="width: 4%;"></th>
-                        <th style="width: 4%;"></th>
+                        <th style="width: 5%;" class="gr">GR Number</th>
+                        <th style="width: 10%;" class="first">First Name</th>
+                        <th style="width: 10%;" class="last">Last Name</th>
+                        <th style="width: 10%;" class="nic">NIC Number</th>
+                        <th style="width: 10%;" class="father">Father Name</th>
+                        <th style="width: 10%;" class="phone">Phone Number</th>
+                        <th style="width: 15%;" class="email">Email Address</th>
                     </tr>
                 </thead>
                 <tbody>
                     <%
-                        do while RSStdDetail.EOF=false
-                    %>
+                            Dim SkipCounter
+                            
+                            SkipCounter=1
+                            RecNumber = 0
+    
+                            do while RSStdDetail.EOF=false
+    
+                                if SkipCounter > SkipRec then
+                                StdId = RSStdDetail("StudentId")
+                        %>
                     <tr>
-                        <td><% response.Write(RSStdDetail("StdGrNumber")) %></td>
-                        <td><% response.Write(RSStdDetail("StdFirstName")) %></td>
-                        <td><% response.Write(RSStdDetail("StdLastName")) %></td>
-                        <td><% response.Write(RSStdDetail("FatherName")) %></td>
-                        <td><% response.Write(RSStdDetail("StdMobileNumber")) %></td>
-                        <td><% response.Write(RSStdDetail("StdEmailAddress")) %></td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="View Profile">
-                            </a>
+                        <td class="gr"><a
+                                href="ViewStudentDetail.asp?QsStdId=<% response.Write(StdId) %>"><% response.Write(RSStdDetail("StdGrNumber")) %></a>
                         </td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="Edit Profile">
-                            </a>
-                        </td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="Academic Qualifications">
-                            </a>
-                        </td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="Technical Qualifications">
-                            </a>
-                        </td>
-                        <td class="link-btn">
-                            <a href="#" class="icon">
-                                <img src="Images/profile.png" alt="" title="Work Experience">
-                            </a>
-                        </td>
+                        <td class="first"><% response.Write(RSStdDetail("StdFirstName")) %></td>
+                        <td class="last"><% response.Write(RSStdDetail("StdLastName")) %></td>
+                        <td class="nic"><% response.Write(RSStdDetail("StdNICNumber")) %></td>
+                        <td class="father"><% response.Write(RSStdDetail("FatherName")) %></td>
+                        <td class="phone"><% response.Write(RSStdDetail("StdMobileNumber")) %></td>
+                        <td class="email"><% response.Write(RSStdDetail("StdEmailAddress")) %></td>
                     </tr>
                     <%
-                        RSStdDetail.MoveNext
-                        loop     
-                    %>
+                                    RecNumber = RecNumber + 1
+                                            
+                                End if
+    
+                                If RecPerPage = RecNumber then
+                                    'PageNumber = PageNumber+1
+                                    exit do
+                                end if
+                                
+                                SkipCounter = SkipCounter+1
+                                RSStdDetail.MoveNext
+                            loop     
+                        %>
                 </tbody>
             </table>
         </section>
+
+        <div class="page-bar">
+            <div class="page-nav">
+                <% if LastPage = 0 or PageNumber <=1 then %>
+                <a href="StudentProfile.asp?QsPageNumber=1" class="disabled">First</a>
+                <% else %>
+                <a href="StudentProfile.asp?QsPageNumber=1" class="">First</a>
+                <% End if %>
+
+                <% if PageNumber > 1 then %>
+                <a href="StudentProfile.asp?QsPageNumber=<% response.write(PageNumber-1) %>" class="">Previous</a>
+                <% else %>
+                <a href="StudentProfile.asp?QsPageNumber=<% response.write(PageNumber-1) %>"
+                    class="disable-btn">Previous</a>
+                <% End if %>
+
+                <% if LastPage > PageNumber then %>
+                <a href="StudentProfile.asp?QsPageNumber=<% response.write(PageNumber+1) %>" class="">Next</a>
+                <% else %>
+                <a href="StudentProfile.asp?QsPageNumber=<% response.write(PageNumber+1) %>" class="disabled">Next</a>
+                <% end if %>
+
+                <% if LastPage > PageNumber then %>
+                <a href="StudentProfile.asp?QsPageNumber=<% response.write(LastPage) %>" class="">Last</a>
+                <% else %>
+                <a href="StudentProfile.asp?QsPageNumber=<% response.write(LastPage) %>" class="disabled">Last</a>
+                <% End if %>
+            </div>
+        </div>
     </main>
+
+    <footer>
+        <!--#include file=Footer.asp-->
+    </footer>
 </body>
 
 </html>
