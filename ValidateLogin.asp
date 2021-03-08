@@ -89,7 +89,7 @@ QryStr = "SELECT LoginUsersDetail.LoginId, LoginUsersDetail.LoginEmail, LoginUse
             'If LoggedDateTime is Null, It Means User is trying to Login in Using Login Page
             if Session("SLoggedDateTime") = "" then
                 Session("SLoggedDateTime")=Now()
-                response.Redirect("StudentProfile.asp")     'Redirecting to StudentProfile Page
+                response.Redirect("Dashboard.asp")     'Redirecting to Dashboard Page
             end if
 
             'response.Write(RSLogin("LoginEmail"))
