@@ -25,8 +25,8 @@
                         <ul class="links">
                             <li><a href="Dashboard.asp">Main Menu</a></li>
                             <li><a href="StudentProfile.asp">Students Profiles</a></li>
-                            <li><a href="#">Courses</a></li>
-                            <li><a href="#">Sign Out</a></li>
+                            <li><a href="CourseContent.asp">Courses</a></li>
+                            <li><a href="SignOut.asp">Sign Out</a></li>
                         </ul>
                     </div>
     
