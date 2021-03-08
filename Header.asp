@@ -32,7 +32,7 @@
                     </li>
 
                     <li>
-                        <a href="#">Courses</a>
+                        <a href="CourseContent.asp">Courses</a>
                     </li>
 
                     <li>
