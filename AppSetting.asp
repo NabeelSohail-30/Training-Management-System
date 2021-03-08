@@ -1,4 +1,4 @@
 <%
-    Dim NumRecPerPage
-    NumRecPerPage = 10
+    Dim RecPerPage
+    RecPerPage = 10
 %>
