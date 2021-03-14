@@ -1,15 +1,5 @@
 <!--#include file=OpenDbConn.asp-->
 <!--#include file=ReValidateLogin.asp-->
-<%    
-    'Dim Conn 
-    'Dim CS
-
-    'Set Conn = Server.CreateObject("ADODB.Connection")
-
-    'CS = "Driver={SQL Server};Server=NABEELS-WORK;Database=TrainingManagementSystem;User Id=TMS;Password=Nabeel30;"
-    'Conn.Open CS
-    
-%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,7 +16,7 @@
         <!--#include file=Header.asp-->
     </header>
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="wrapper">
             <form action="AddNewStd.asp" method="POST">
 
