@@ -19,10 +19,21 @@ body {
     margin-top: 10px;
 }
 
-table {
-    border: 2px solid black;
-    background-color: whitesmoke;
-    color: black;
+.label-data{
+    background-color: rgba(245, 245, 245, 0.205);
+    border-color: rgba(105, 105, 105, 0.589);
+}
+
+.panel-head {
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+    background-color: rgb(169, 169, 169);
+}
+
+.input-heading {
+    font-size: 16px;
+    font-weight: 500;
 }
 
 .button {
@@ -46,21 +57,71 @@ table {
     cursor: pointer;
 }
 
-.label-data{
-    background-color: rgba(245, 245, 245, 0.205);
-    border-color: rgba(105, 105, 105, 0.589);
-}
-
-.panel-head {
-    font-size: 26px;
-    font-weight: bold;
+table {
+    border: 2px solid black;
+    background-color: whitesmoke;
+    color: black;
     text-align: center;
-    background-color: rgb(169, 169, 169);
+    vertical-align: middle;
+    margin: auto;
+    width: 95%;
 }
 
-.input-heading {
+.add-new {
+    background-color: whitesmoke;
+    padding: 10px 22px;
+    font-size: 22px;
+    border: 0px;
+    outline: 0px;
+    border-radius: 20px;
+    color: black;
+    font-weight: bold;
+}
+
+.add-new a:hover {
+    background-color: gray;
+    padding: 10px 22px;
+    font-size: 22px;
+    border: 0px;
+    outline: 0px;
+    border-radius: 20px;
+    color: whitesmoke;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.add-new img {
+    margin-bottom: 3px;
+}
+
+.action {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.search-bar {
+    margin-bottom: 28px;
+    padding: 8px;
     font-size: 16px;
-    font-weight: 500;
+    border: 1px solid white;
+    border-radius: 10px;
+    width: 200px;
+}
+
+.search-btn {
+    background-color: rgb(29, 21, 172);
+    padding: 8px 10px;
+    font-size: 16px;
+    color: whitesmoke;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.grid {
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .error-border{
@@ -69,4 +130,42 @@ table {
 
 footer{
     margin-top: 50px;
+}
+
+.icon img {
+    width: 26px;
+    height: 26px;
+}
+
+.link-btn {
+    text-align: center;
+}
+
+.page-bar {
+    text-align: center;
+    margin: auto;
+    margin-top: 18px;
+}
+
+.page-nav a {
+    background-color: whitesmoke;
+    padding: 8px 10px;
+    font-size: 16px;
+    border: 0px;
+    outline: 0px;
+    border-radius: 12px;
+    color: black;
+    font-weight: 500;
+}
+
+.page-nav a:hover {
+    background-color: blue;
+    padding: 8px 10px;
+    font-size: 16px;
+    border: 0px;
+    outline: 0px;
+    border-radius: 12px;
+    color: whitesmoke;
+    font-weight: 500;
+    text-decoration: none;
 }
