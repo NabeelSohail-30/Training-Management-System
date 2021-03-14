@@ -85,7 +85,7 @@
             </div>
         </section>
 
-        <section class="student-profile-list">
+        <section class="grid">
             <table class="table table-bordered table-hover">
                 <thead class="thead-light">
                     <tr>
