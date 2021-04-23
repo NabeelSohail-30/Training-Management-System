@@ -1,0 +1,20 @@
+.wrapper {
+    width: 70%;
+    height: max-content;
+    background-color: whitesmoke;
+    color: black;
+    margin: 24px auto;
+}
+
+div span{
+    color: red;
+}
+
+.search {
+    margin-top: 20px;
+}
+
+.search div {
+    display: inline-block;
+    margin: 0px 10px;
+}
