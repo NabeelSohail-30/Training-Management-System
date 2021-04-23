@@ -35,7 +35,8 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="" class="input-heading">Course Code</label>
-                                    <input type="text" class="form-control" name="FormCourseCode">
+                                    <input type="text" class="form-control" name="FormCourseCode"
+                                        value="<% response.Write(Session("smCourseCode")) %>">
                                 </div>
                             </div>
                         </div>
@@ -49,7 +50,8 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="" class="input-heading">Course Name</label>
-                                    <input type="text" class="form-control" name="FormCourseName">
+                                    <input type="text" class="form-control" name="FormCourseName"
+                                        value="<% response.Write(Session("smCourseName")) %>">
                                 </div>
                             </div>
                         </div>
@@ -72,16 +74,21 @@
                                         RSCategory.Open "SELECT CategoryId, Category FROM ListCourseCategory",Conn
     
                                         do while NOT RSCategory.EOF
-                                    %>
+                                            if RSCategory("CategoryId") = Session("smCourseCategory") then
+                                        %>
+                                        <option value="<% response.write(RSCategory("CategoryId")) %>" selected>
+                                            <% response.write(RSCategory("Category")) %></option>
+                                        <% else %>
                                         <option value="<% response.write(RSCategory("CategoryId")) %>">
                                             <% response.write(RSCategory("Category")) %></option>
                                         <%
+                                            end if
                                         RSCategory.MoveNext
                                         Loop
                 
                                         RSCategory.Close
                                         Set RSNationality = Nothing
-                                    %>
+                                        %>
                                     </select>
                                 </div>
                             </div>
@@ -97,10 +104,15 @@
                                         RSSubCategory.Open "SELECT SubCategoryId, SubCategory FROM ListCourseSubCategory",Conn
     
                                         do while NOT RSSubCategory.EOF
+                                            if RSSubCategory("SubCategoryId") = Session("smCourseSubCategory") then
                                     %>
+                                        <option value="<% response.write(RSSubCategory("SubCategoryId")) %>" selected>
+                                            <% response.write(RSSubCategory("SubCategory")) %></option>
+                                        <% else %>
                                         <option value="<% response.write(RSSubCategory("SubCategoryId")) %>">
                                             <% response.write(RSSubCategory("SubCategory")) %></option>
                                         <%
+                                            end if
                                         RSSubCategory.MoveNext
                                         Loop
                 
@@ -125,7 +137,8 @@
                                 <div class="form-group">
                                     <label for="" class="input-heading">Course Description</label>
                                     <br>
-                                    <textarea name="FormCourseDescription" id="" cols="180" rows="7"></textarea>
+                                    <textarea name="FormCourseDescription" id="" cols="180"
+                                        rows="7"><% response.Write(Session("smCourseDescription")) %></textarea>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +153,8 @@
                                 <div class="form-group">
                                     <label for="" class="input-heading">Audience</label>
                                     <br>
-                                    <textarea name="FormAudience" id="" cols="180" rows="5"></textarea>
+                                    <textarea name="FormAudience" id="" cols="180"
+                                        rows="5"><% response.Write(Session("smAudience")) %></textarea>
                                 </div>
                             </div>
                         </div>
