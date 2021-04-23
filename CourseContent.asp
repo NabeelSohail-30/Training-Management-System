@@ -103,17 +103,18 @@
     <main>
         <section class="action">
             <div>
-                <form class="search" action="CourseContent.asp" method="POST">
+                <form class="search" action="CourseContent.asp" method="POST" id="SearchForm">
                     <div>
                         <input type="search" class="search-bar" placeholder="Search By Course Code"
-                            name="FormCourseCode">
+                            name="FormCourseCode" value="<% response.write(mCourseCode) %>">
                     </div>
                     <div>
                         <input type="search" class="search-bar" placeholder="Search By Course Name"
-                            name="FormCourseName">
+                            name="FormCourseName" value="<% response.write(mCourseName) %>">
                     </div>
                     <div>
-                        <select name="FormCourseCategoryId" id="" class="search-bar" name="FormCategory">
+                        <select name="FormCourseCategoryId" id="" class="search-bar"
+                            onchange="document.getElementById('SearchForm').submit();">
                             <option value="-1">Select Category</option>
                             <%
                             Dim RSCategory
@@ -122,10 +123,15 @@
                             RSCategory.Open "SELECT CategoryId, Category FROM ListCourseCategory",Conn
 
                             do while NOT RSCategory.EOF
+                                if mCourseCategoryId = RSCategory("CategoryId") then
                         %>
+                            <option value="<% response.write(RSCategory("CategoryId")) %>" selected>
+                                <% response.write(RSCategory("Category")) %></option>
+                            <% else %>
                             <option value="<% response.write(RSCategory("CategoryId")) %>">
                                 <% response.write(RSCategory("Category")) %></option>
                             <%
+                                end if
                             RSCategory.MoveNext
                             Loop
     
@@ -135,7 +141,8 @@
                         </select>
                     </div>
                     <div>
-                        <select name="FormCourseSubCategoryId" id="" class="search-bar" name="FormSubCategory">
+                        <select name="FormCourseSubCategoryId" id="" class="search-bar"
+                            onchange="document.getElementById('SearchForm').submit();">
                             <option value="-1">Select Sub Category</option>
                             <%
                             Dim RSSubCategory
@@ -144,10 +151,15 @@
                             RSSubCategory.Open "SELECT SubCategoryId, SubCategory FROM ListCourseSubCategory",Conn
 
                             do while NOT RSSubCategory.EOF
+                                if mCourseSubCategoryId = RSSubCategory("SubCategoryId") then
                         %>
+                            <option value="<% response.write(RSSubCategory("SubCategoryId")) %>" selected>
+                                <% response.write(RSSubCategory("SubCategory")) %></option>
+                            <% else %>
                             <option value="<% response.write(RSSubCategory("SubCategoryId")) %>">
                                 <% response.write(RSSubCategory("SubCategory")) %></option>
                             <%
+                                end if
                             RSSubCategory.MoveNext
                             Loop
     
