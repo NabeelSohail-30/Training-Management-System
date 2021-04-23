@@ -14,6 +14,52 @@
 </head>
 
 <%
+    'Variables Declaration
+        Dim mGrNumber
+        Dim mFirstName
+        Dim mLastName
+        Dim mFatherName
+        Dim mStdNic
+        Dim mStdMobile
+        Dim QryCondition
+    'end
+
+    'Variables Initialization
+        mGrNumber = request.form("FormGrNumber")
+        mFirstName = request.form("FormFirstName")
+        mLastName = request.form("FormLastName")
+        mFatherName = request.form("FormFatherName")
+        mStdNic = request.form("FormStdNIC")
+        mStdMobile = request.form("FormStdMobile")
+        QryCondition = " WHERE(1=1) "
+    'end
+
+    'Building QryCondition
+        if mGrNumber <> "" then
+            QryCondition = QryCondition & " AND (StdGrNumber like '%" & mGrNumber & "%')"
+        end if
+
+        if mFirstName <> "" then
+            QryCondition = QryCondition & " AND (StdFirstName like '%" & mFirstName & "%')"
+        end if
+
+        if mLastName <> "" then
+            QryCondition = QryCondition & " AND (StdLastName like '%" & mLastName & "%')"
+        end if
+
+        if mFatherName <> "" then
+            QryCondition = QryCondition & " AND (FatherName like '%" & mFatherName & "%')"
+        end if
+
+        if mStdNic <> "" then
+            QryCondition = QryCondition & " AND (StdNICNumber like '%" & mStdNic & "%')"
+        end if
+
+        if mStdMobile <> "" then
+            QryCondition = QryCondition & " AND (StdMobileNumber like '%" & mStdMobile & "%')"
+        end if
+    'end
+
     'OpenDb, OpenRS
         call OpenDbConn()
         Dim RSStdDetail
@@ -23,7 +69,7 @@
         Set RSStdDetail = Server.CreateObject("ADODB.RecordSet")
         Set RSCount = Server.CreateObject("ADODB.RecordSet")
 
-        RSStdDetail.Open "SELECT StudentId, StdGrNumber, StdFirstName, StdLastName, StdNICNumber, FatherName, StdMobileNumber, StdEmailAddress FROM StudentDetail ORDER BY StudentId DESC", conn
+        RSStdDetail.Open "SELECT * FROM StudentDetail" & QryCondition & "ORDER BY StudentId DESC", conn
         RSCount.Open "SELECT COUNT(StudentId) AS TotalRecords FROM StudentDetail", conn
     'end
 
@@ -63,25 +109,37 @@
     <main>
         <section class="action">
             <div>
-                <form class="search" action="#">
+                <form class="search" action="StudentProfile.asp" METHOD="POST">
                     <div>
-                        <input type="search" class="search-bar" placeholder="Search By GR Number">
+                        <input type="search" class="search-bar" placeholder="Search By GR Number" name="FormGrNumber"
+                            value="<% response.write(mGrNumber) %>">
                     </div>
                     <div>
-                        <input type="search" class="search-bar" placeholder="Search By First Name">
+                        <input type="search" class="search-bar" placeholder="Search By First Name" name="FormFirstName"
+                            value="<% response.write(mFirstName) %>">
                     </div>
                     <div>
-                        <input type="search" class="search-bar" placeholder="Search By Last Name">
+                        <input type="search" class="search-bar" placeholder="Search By Last Name" name="FormLastName"
+                            value="<% response.write(mLastName) %>">
                     </div>
                     <div>
-                        <input type="search" class="search-bar" placeholder="Search By Father Name">
+                        <input type="search" class="search-bar" placeholder="Search By Father Name"
+                            name="FormFatherName" value="<% response.write(mFatherName) %>">
+                    </div>
+                    <div>
+                        <input type="search" class="search-bar" placeholder="Search By NIC" name="FormStdNIC"
+                            value="<% response.write(mStdNic) %>">
+                    </div>
+                    <div>
+                        <input type="search" class="search-bar" placeholder="Search By Mobile" name="FormStdMobile"
+                            value="<% response.write(mStdMobile) %>">
                     </div>
                     <input type="submit" name="" id="" class="search-btn" value="Search">
                 </form>
             </div>
             <div class="btn">
-                <a href="AddNewStdProfile.asp" class="add-new" title="Add New Student Profile"><img src="Images/Add.svg" alt="" title="Add New Student Profile"
-                        width="26px" height="26px"> New Student</a>
+                <a href="AddNewStdProfile.asp" class="add-new" title="Add New Student Profile"><img src="Images/Add.svg"
+                        alt="" title="Add New Student Profile" width="26px" height="26px"> New Student</a>
             </div>
         </section>
 

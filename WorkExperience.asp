@@ -81,6 +81,10 @@
                             <a class="nav-link active"
                                 href="WorkExperience.asp?QsStdId=<% response.Write(StdId) %>">Work Experience</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="StudentCourse.asp?QsStdId=<% response.Write(StdId) %>">Training
+                                Courses</a>
+                        </li>
                     </ul>
                 </div>
             </div>

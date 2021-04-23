@@ -9,6 +9,18 @@
         dim mCourseCategoryId
         dim mCourseSubCategoryId
         dim mAudience
+
+        Session("sCourseCode") = ""
+        Session("sCourseName") = ""
+        Session("sCourseCategory") = ""
+        Session("sCourseSubCategory") = ""
+
+        Session("smCourseCode") = ""
+        Session("smCourseName") = ""
+        Session("smCourseCategory") = ""
+        Session("smCourseSubCategory") = ""
+        Session("smCourseDescription") = ""
+        Session("smAudience") = ""
     'end
 
     'Variable Initialization
@@ -27,8 +39,15 @@
         Session("sCourseCategory") = ValidateCategory()
         Session("sCourseSubCategory") = ValidateSubCategory()
 
+        Session("smCourseCode") = mCourseCode
+        Session("smCourseName") = mCourseName
+        Session("smCourseCategory") = mCourseCategoryId
+        Session("smCourseSubCategory") = mCourseSubCategoryId
+        Session("smCourseDescription") = mCourseDescription
+        Session("smAudience") = mAudience
+
         if ErrorFound=true then
-            response.Redirect("CourseContentEdit.asp?QsCourseId=" & mCourseId)
+            response.Redirect("CourseContentEdit.asp?QsIsError=1&QsCourseId=" & mCourseId)
         end if
     'end
 
@@ -38,8 +57,8 @@
 
     'Insert Rec
         QryStr = "UPDATE CourseContent " & _ 
-                "SET CourseCode = '" & mCourseCode & "', CourseName = '" & mCourseName & "', CourseDescription = '" & mCourseDescription & "', CourseCategoryId = " & mCourseCategoryId & _
-                ", CourseSubCategoryId = " & mCourseSubCategoryId & ", Audience = '" & mAudience & "', UserLastUpdatedBy = " & Session("SUserId") & _
+                "SET CourseCode = '" & mCourseCode & "', CourseName = '" & mCourseName & "', CourseDescription = '" & mCourseDescription & "', CategoryId = " & mCourseCategoryId & _
+                ", SubCategoryId = " & mCourseSubCategoryId & ", Audience = '" & mAudience & "', UserLastUpdatedBy = " & Session("SUserId") & _
                 ", LastUpdatedDateTime = '" & now() & "' WHERE (CourseId = " & mCourseId & ")"
                     
 
@@ -56,25 +75,23 @@
     'Functions
 
     'ValidateCourseCode
-        function ValidateCourseCode()
-            if mCourseCode = "" then 
-                ValidateCourseCode = "Course Code cannot be Null"
+    function ValidateCourseCode()
+        if mCourseCode = "" then 
+            ValidateCourseCode = "Course Code cannot be Null"
+            ErrorFound = True
+        elseif len(mCourseCode) > 10 then
+            ValidateCourseCode = "Max Length is 10"
+            ErrorFound = True
+        else
+            Dim RSCourseCode
+            Set RSCourseCode = Server.CreateObject("ADODB.RecordSet")
+            RSCourseCode.open "SELECT * FROM CourseContent WHERE(CourseCode = '" & mCourseCode & "') AND (CourseId <> " & mCourseId & ")", conn
+            if RSCourseCode.eof = false then
+                ValidateCourseCode = "Duplicate Course Code Found"
                 ErrorFound = True
-            elseif len(mCourseCode) > 10 then
-                ValidateCourseCode = "Max Length is 10"
-                ErrorFound = True
-            else
-                Dim RSCode
-                Set RSCode = Server.CreateObject("ADODB.RecordSet")
-                RSCode.open "SELECT * FROM CourseContent WHERE(CourseCode = '" & mCourseCode & "')", conn
-                if RSCode.eof then 
-                    ValidateCourseCode = "Duplicate Course Code Found"
-                    ErrorFound = True
-                    RSCode.close 
-                    set RSCode = Nothing
-                end if
             end if
-        end function
+        end if
+    end function
     'end
 
     'ValidateCourseName
@@ -88,9 +105,9 @@
             else 
                 Dim RSName
                 Set RSName = Server.CreateObject("ADODB.RecordSet")
-                RSName.open "SELECT * FROM CourseContent WHERE(CourseName = '" & mCourseName & "')", conn
-                if RSName.eof then
-                    ValidateCourseCode = "Duplicate Course Name Found"
+                RSName.open "SELECT * FROM CourseContent WHERE(CourseName = '" & mCourseName & "') AND (CourseId <> " & mCourseId & ")", conn
+                if RSName.eof = False then
+                    ValidateCourseName = "Duplicate Course Name Found"
                     ErrorFound = True
                     RSName.close 
                     set RSName = Nothing

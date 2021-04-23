@@ -87,6 +87,10 @@
                             <a class="nav-link" href="WorkExperience.asp?QsStdId=<% response.Write(StdId) %>">Work
                                 Experience</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="StudentCourse.asp?QsStdId=<% response.Write(StdId) %>">Training
+                                Courses</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -441,8 +445,9 @@
                                         href="AcademicQualification.asp?QsStdId=<% response.write(StdId) %>&Action=2&EditForm=true&QsAcdId=<% response.write(RSStdAcdQual("AcdQualificationId")) %>"><img
                                             src="Images/edit.png" alt="" width="20px" height="20px"></a></td>
                                 <td>
-                                    <a href="AcademicQualification.asp?QsStdId=<% response.write(StdId) %>&Action=3&QsAcdId=<% response.write(RSStdAcdQual("AcdQualificationId")) %>" onclick="return window.confirm('Are you sure to delete?\nPress OK to Delete');">
-                                    <img src="
+                                    <a href="AcademicQualification.asp?QsStdId=<% response.write(StdId) %>&Action=3&QsAcdId=<% response.write(RSStdAcdQual("AcdQualificationId")) %>"
+                                        onclick="return window.confirm('Are you sure to delete?\nPress OK to Delete');">
+                                        <img src="
                                         Images/delete.png" alt="" width="20px" height="20px"></a></td>
                                 <td class="qualf"><% response.write(RSStdAcdQual("Qualifications")) %></td>
                                 <td class="major"><% response.write(RSStdAcdQual("Major")) %></td>

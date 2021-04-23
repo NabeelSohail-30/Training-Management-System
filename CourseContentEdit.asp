@@ -3,7 +3,10 @@
 <%
 
     Dim CourseId
+    Dim IsError
+
     CourseId = request.QueryString("QsCourseId")
+    IsError = request.QueryString("QsIsError")
 
     Dim RSCourseContent
     Set RSCourseContent = Server.CreateObject("ADODB.RecordSet")
@@ -61,10 +64,16 @@
                         <div class="row mt-2">
                             <div class="col">
                                 <div class="form-group">
-                                    <input type="hidden" name="FormCourseId" value="<% response.Write(RSCourseContent("CourseId")) %>">
+                                    <input type="hidden" name="FormCourseId"
+                                        value="<% response.Write(RSCourseContent("CourseId")) %>">
                                     <label for="" class="input-heading">Course Code</label>
+                                    <% if IsError = "1" then %>
+                                    <input type="text" class="form-control" name="FormCourseCode"
+                                        value="<% response.Write(Session("smCourseCode")) %>">
+                                    <% else %>
                                     <input type="text" class="form-control" name="FormCourseCode"
                                         value="<% response.Write(RSCourseContent("CourseCode")) %>">
+                                    <% end if %>
                                 </div>
                             </div>
                         </div>
@@ -78,8 +87,13 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="" class="input-heading">Course Name</label>
+                                    <% if IsError = "1" then %>
+                                    <input type="text" class="form-control" name="FormCourseName"
+                                        value="<% response.Write(Session("smCourseName")) %>">
+                                    <% else %>
                                     <input type="text" class="form-control" name="FormCourseName"
                                         value="<% response.Write(RSCourseContent("CourseName")) %>">
+                                    <% end if %>
                                 </div>
                             </div>
                         </div>
@@ -93,10 +107,37 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="" class="input-heading">Select Category</label>
+                                    <% if IsError = "1" then %>
                                     <select name="FormCourseCategoryId" id="" class="form-control">
                                         <option value="-1">Select Category</option>
                                         <%
                                         Dim RSCategory
+                                        Set RSCategory = Server.CreateObject("ADODB.RecordSet")
+                                        
+                                        RSCategory.Open "SELECT CategoryId, Category FROM ListCourseCategory",Conn
+    
+                                        do while NOT RSCategory.EOF
+                                            if RSCategory("CategoryId") = Session("smCourseCategory") then
+                                        %>
+                                        <option value="<% response.write(RSCategory("CategoryId")) %>" selected>
+                                            <% response.write(RSCategory("Category")) %></option>
+                                        <% else %>
+                                        <option value="<% response.write(RSCategory("CategoryId")) %>">
+                                            <% response.write(RSCategory("Category")) %></option>
+                                        <%
+                                            end if
+                                        RSCategory.MoveNext
+                                        Loop
+                
+                                        RSCategory.Close
+                                        Set RSNationality = Nothing
+                                        %>
+                                    </select>
+                                    <% else %>
+                                    <select name="FormCourseCategoryId" id="" class="form-control">
+                                        <option value="-1">Select Category</option>
+                                        <%
+                                        'Dim RSCategory
                                         Set RSCategory = Server.CreateObject("ADODB.RecordSet")
                                         
                                         RSCategory.Open "SELECT CategoryId, Category FROM ListCourseCategory",Conn
@@ -118,11 +159,39 @@
                                         Set RSNationality = Nothing
                                         %>
                                     </select>
+                                    <% end if %>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="" class="input-heading">Select Sub Category</label>
+                                    <% if IsError = "1" then %>
+                                    <select name="FormCourseSubCategoryId" id="" class="form-control">
+                                        <option value="-1">Select Sub Category</option>
+                                        <%
+                                        'Dim RSSubCategory
+                                        Set RSSubCategory = Server.CreateObject("ADODB.RecordSet")
+                                        
+                                        RSSubCategory.Open "SELECT SubCategoryId, SubCategory FROM ListCourseSubCategory",Conn
+    
+                                        do while NOT RSSubCategory.EOF
+                                            if RSSubCategory("SubCategoryId") = Session("smCourseSubCategory") then
+                                    %>
+                                        <option value="<% response.write(RSSubCategory("SubCategoryId")) %>" selected>
+                                            <% response.write(RSSubCategory("SubCategory")) %></option>
+                                        <% else %>
+                                        <option value="<% response.write(RSSubCategory("SubCategoryId")) %>">
+                                            <% response.write(RSSubCategory("SubCategory")) %></option>
+                                        <%
+                                            end if
+                                        RSSubCategory.MoveNext
+                                        Loop
+                
+                                        RSSubCategory.Close
+                                        Set RSNationality = Nothing
+                                    %>
+                                    </select>
+                                    <% else %>
                                     <select name="FormCourseSubCategoryId" id="" class="form-control">
                                         <option value="-1">Select Sub Category</option>
                                         <%
@@ -148,6 +217,8 @@
                                         Set RSNationality = Nothing
                                     %>
                                     </select>
+                                    <% end if %>
+
                                 </div>
                             </div>
                         </div>
@@ -165,8 +236,14 @@
                                 <div class="form-group">
                                     <label for="" class="input-heading">Course Description</label>
                                     <br>
+                                    <% if IsError = "1" then %>
+                                    <textarea name="FormCourseDescription" id="" cols="180"
+                                        rows="7"><% response.Write(Session("smCourseDescription")) %></textarea>
+                                    <% else %>
                                     <textarea name="FormCourseDescription" id="" cols="180"
                                         rows="7"><% response.Write(RSCourseContent("CourseDescription")) %></textarea>
+                                    <% end if %>
+
                                 </div>
                             </div>
                         </div>
@@ -181,8 +258,14 @@
                                 <div class="form-group">
                                     <label for="" class="input-heading">Audience</label>
                                     <br>
+                                    <% if IsError = "1" then %>
+                                    <textarea name="FormAudience" id="" cols="180"
+                                        rows="5"><% response.Write(Session("smAudience")) %></textarea>
+                                    <% else %>
                                     <textarea name="FormAudience" id="" cols="180"
                                         rows="5"><% response.Write(RSCourseContent("Audience")) %></textarea>
+                                    <% end if %>
+
                                 </div>
                             </div>
                         </div>

@@ -196,7 +196,7 @@
                             <label for="" class="mr-2 input-heading">Student Gender</label>
                             <br>
                             <select name="FormStdGenderId" class="form-control" id="Gender"
-                            onblur="DropDownValidate(this,document.getElementById('GenderError'));">
+                                onblur="DropDownValidate(this,document.getElementById('GenderError'));">
                                 <option value="-1">Select Gender</option>
                                 <%
                                         Dim RSGender
@@ -224,7 +224,7 @@
                             <label for="" class="mr-2 input-heading">Student Marital Status</label>
                             <br>
                             <select name="FormStdMaritalId" class="form-control" id="MaritalStatus"
-                            onblur="DropDownValidate(this,document.getElementById('MaritalStError'));">
+                                onblur="DropDownValidate(this,document.getElementById('MaritalStError'));">
                                 <option value="-1">Select Marital Status</option>
                                 <%
                                         Dim RSMaritalStatus

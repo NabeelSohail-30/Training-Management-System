@@ -17,7 +17,7 @@
     <div class="logo">
         Training Management System
     </div>
-    
+
     <div class="row">
         <div class="col-md-12">
             <!-------------------------Navigation Bar----------------------->
@@ -33,6 +33,10 @@
 
                     <li>
                         <a href="CourseContent.asp">Courses</a>
+                    </li>
+
+                    <li>
+                        <a href="CourseDirectory.asp">Course Directory</a>
                     </li>
 
                     <li>

@@ -10,34 +10,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/bootstrap.css">
     <link rel="stylesheet" href="CSS/GlobalStyle.css">
-    <link rel="stylesheet" href="CSS/StyleCourseContent.css">
-    <title>Course Content</title>
+    <link rel="stylesheet" href="CSS/StyleCourseDirectory.css">
+    <title>Course Directory</title>
 </head>
 <%
     'OpenDb, OpenRS
         call OpenDbConn()
-        Dim RSCourseContent
+        Dim RSCourseDirectory
         Dim RSCount
-        Dim CourseId
         dim mCourseCode
         dim mCourseName
+        dim mStartDate
+        dim mEndDate
         dim mCourseCategoryId
         dim mCourseSubCategoryId
         dim QryCondition
+        'dim FormattedEndDate
 
         mCourseCode = request.Form("FormCourseCode")
         mCourseName = request.Form("FormCourseName")
+        mStartDate = request.Form("FormStartDate")
+        mEndDate = request.Form("FormEndDate")
         mCourseCategoryId = cint(request.Form("FormCourseCategoryId"))
         mCourseSubCategoryId = cint(request.Form("FormCourseSubCategoryId"))
         QryCondition = " WHERE(1=1) "
+        'FormattedEndDate = year(cdate(mEndDate)) & "-" & month(cdate(mEndDate)) & "-" & day(cdate(mEndDate))
 
-        if mCourseCategoryId = 0 then
-            mCourseCategoryId = -1
-        end if
-
-        if mCourseSubCategoryId = 0 then
-            mCourseSubCategoryId = -1
-        end if
+        'response.write(mStartDate)
+        'response.write("<br>" & cdate(mEndDate))
+        'response.write("<br>" & FormattedEndDate)
+        
 
         if mCourseCode <> "" then
             QryCondition = QryCondition & " AND (CourseCode like '%" & mCourseCode & "%') "
@@ -47,24 +49,35 @@
             QryCondition = QryCondition & " AND (CourseName like '%" & mCourseName & "%') "
         end if
 
-        if mCourseCategoryId <> -1 then
+        if mStartDate <> "" AND mEndDate <> "" then
+            QryCondition = QryCondition & " AND (StartDate >= '" & mStartDate & "') "
+            QryCondition = QryCondition & " AND (StartDate <= '" & mEndDate & "') "
+        end if
+
+        if mStartDate <> "" AND mEndDate = "" then
+            QryCondition = QryCondition & " AND (StartDate >= '" & mStartDate & "') "
+        end if
+
+        if mEndDate <> "" AND mStartDate = "" then
+            QryCondition = QryCondition & " AND (EndDate <= '" & mEndDate & "') "
+        end if
+
+        if mCourseCategoryId > 0 then
             QryCondition = QryCondition & " AND (CategoryId = " & mCourseCategoryId & ") "
         end if
 
-        if mCourseSubCategoryId <> -1 then
+        if mCourseSubCategoryId > 0 then
             QryCondition = QryCondition & " AND (SubCategoryId = " & mCourseSubCategoryId & ") "
         end if
 
-        Set RSCourseContent = Server.CreateObject("ADODB.RecordSet")
+        Set RSCourseDirectory = Server.CreateObject("ADODB.RecordSet")
         Set RSCount = Server.CreateObject("ADODB.RecordSet")
 
-        'response.End
-
-        'Default Query with all Records - 
-        QryStr = "SELECT * FROM V_CourseContentView" & QryCondition & "ORDER BY CourseId DESC"
-        RSCourseContent.Open QryStr, conn
+        QryStr = "SELECT * FROM V_CourseDirectoryView" & QryCondition & "ORDER BY CourseDirectoryId DESC"
+        RSCourseDirectory.Open QryStr, conn
         'response.Write(QryStr)
-        RSCount.Open "SELECT COUNT(CourseId) AS TotalRecords FROM CourseContent", conn
+        'response.End
+        RSCount.Open "SELECT COUNT(CourseDirectoryId) AS TotalRecords FROM CourseDirectory", conn
     'end
 
     'Paging
@@ -103,7 +116,7 @@
     <main>
         <section class="action">
             <div>
-                <form class="search" action="CourseContent.asp" method="POST" id="SearchForm">
+                <form class="search" action="CourseDirectory.asp" method="POST" id="SearchForm">
                     <div>
                         <input type="search" class="search-bar" placeholder="Search By Course Code"
                             name="FormCourseCode" value="<% response.write(mCourseCode) %>">
@@ -168,23 +181,37 @@
                         %>
                         </select>
                     </div>
+                    <div>
+                        <input type="date" class="search-bar" placeholder="Search By Start Date" name="FormStartDate"
+                            value="<% response.write(mStartDate) %>">
+                    </div>
+                    <div>
+                        <input type="date" class="search-bar" placeholder="Search By End Date" name="FormEndDate"
+                            value="<% response.write(mEndDate) %>">
+                    </div>
                     <input type="submit" name="" id="" class="search-btn" value="Search">
                 </form>
             </div>
             <div class="btn">
-                <a href="CourseContentAdd.asp" class="add-new" title="Add New Course"><img src="Images/Add.svg" alt=""
-                        title="Add New Course" width="26px" height="26px"> New Course</a>
+                <a href="CourseDirectoryAdd.asp" class="add-new" title="Add New Course Directory"><img
+                        src="Images/Add.svg" alt="" title="Add New Course Directory" width="26px" height="26px"> New
+                    Course Directory</a>
             </div>
         </section>
 
         <section class="grid">
-            <table class="table table-bordered table-hover" style="width: 70%;">
+            <table class="table table-bordered table-hover" style="width: 97%;">
                 <thead class="thead-light">
                     <tr>
-                        <th style="width: 4%;" class="code">Course Code</th>
-                        <th style="width: 12%;" class="name">Course Name</th>
-                        <th style="width: 10%;" class="catg">Category</th>
-                        <th style="width: 10%;" class="sub">Sub Category</th>
+                        <th style="width: 3%;" class="code">Course Code</th>
+                        <th style="width: 15%;" class="name">Course Name</th>
+                        <th style="width: 4%;" class="startdate">Start Date</th>
+                        <th style="width: 4%;" class="enddate">End Date</th>
+                        <th style="width: 3%;" class="duration">Course Duration</th>
+                        <th style="width: 7%;" class="time">Time Slot</th>
+                        <th style="width: 4%;" class="closing">Enrollment Closing Date</th>
+                        <th style="width: 5%;" class="fee">Course Fee</th>
+                        <th style="width: 5%;" class="status">Course Directory Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -194,18 +221,24 @@
                         SkipCounter=1
                         RecNumber = 0
 
-                        do while NOT RSCourseContent.EOF
+                        do while NOT RSCourseDirectory.EOF
 
                             if SkipCounter > SkipRec then
-                                CourseId = RSCourseContent("CourseId")
+                                CourseId = RSCourseDirectory("CourseId")
                     %>
                     <tr>
-                        <td class="code"><a
-                                href="CourseContentView.asp?QsCourseId=<% response.write(CourseId) %>"><% response.Write(RSCourseContent("CourseCode")) %></a>
+                        <td><a
+                                href="CourseDirectoryView.asp?QsId=<% response.Write(RSCourseDirectory("CourseDirectoryId")) %>"><% response.Write(RSCourseDirectory("CourseCode")) %></a>
                         </td>
-                        <td class="name"><% response.Write(RSCourseContent("CourseName")) %></td>
-                        <td class="catg"><% response.Write(RSCourseContent("Category")) %></td>
-                        <td class="sub"><% response.Write(RSCourseContent("SubCategory")) %></td>
+                        <td><% response.Write(RSCourseDirectory("CourseName")) %></td>
+                        <td><% response.Write(RSCourseDirectory("StartDate")) %></td>
+                        <td><% response.Write(RSCourseDirectory("EndDate")) %></td>
+                        <td><% response.Write(RSCourseDirectory("CourseDuration")) %></td>
+                        <td><% response.Write(FormatDateTime(RSCourseDirectory("StartTime"),3)& " - " & FormatDateTime(RSCourseDirectory("EndTime"),3)) %>
+                        </td>
+                        <td><% response.Write(RSCourseDirectory("EnrollmentClosingDate")) %></td>
+                        <td><% response.Write(RSCourseDirectory("CourseFee") & " PKR") %></td>
+                        <td><% response.Write(RSCourseDirectory("CourseDirectoryStatus")) %></td>
                     </tr>
                     <%
                                 RecNumber = RecNumber + 1
@@ -218,11 +251,11 @@
                             end if
                             
                             SkipCounter = SkipCounter+1
-                            RSCourseContent.MoveNext
+                            RSCourseDirectory.MoveNext
                         loop
 
-                        RSCourseContent.close
-                        set RSCourseContent = Nothing
+                        RSCourseDirectory.close
+                        set RSCourseDirectory = Nothing
                     %>
                 </tbody>
             </table>
@@ -232,27 +265,28 @@
     <div class="page-bar">
         <div class="page-nav">
             <% if LastPage = 0 or PageNumber <=1 then %>
-            <a href="CourseContent.asp?QsPageNumber=1" class="disabled">First</a>
+            <a href="CourseDirectory.asp?QsPageNumber=1" class="disabled">First</a>
             <% else %>
-            <a href="CourseContent.asp?QsPageNumber=1" class="">First</a>
+            <a href="CourseDirectory.asp?QsPageNumber=1" class="">First</a>
             <% End if %>
 
             <% if PageNumber > 1 then %>
-            <a href="CourseContent.asp?QsPageNumber=<% response.write(PageNumber-1) %>" class="">Previous</a>
+            <a href="CourseDirectory.asp?QsPageNumber=<% response.write(PageNumber-1) %>" class="">Previous</a>
             <% else %>
-            <a href="CourseContent.asp?QsPageNumber=<% response.write(PageNumber-1) %>" class="disable-btn">Previous</a>
+            <a href="CourseDirectory.asp?QsPageNumber=<% response.write(PageNumber-1) %>"
+                class="disable-btn">Previous</a>
             <% End if %>
 
             <% if LastPage > PageNumber then %>
-            <a href="CourseContent.asp?QsPageNumber=<% response.write(PageNumber+1) %>" class="">Next</a>
+            <a href="CourseDirectory.asp?QsPageNumber=<% response.write(PageNumber+1) %>" class="">Next</a>
             <% else %>
-            <a href="CourseContent.asp?QsPageNumber=<% response.write(PageNumber+1) %>" class="disabled">Next</a>
+            <a href="CourseDirectory.asp?QsPageNumber=<% response.write(PageNumber+1) %>" class="disabled">Next</a>
             <% end if %>
 
             <% if LastPage > PageNumber then %>
-            <a href="CourseContent.asp?QsPageNumber=<% response.write(LastPage) %>" class="">Last</a>
+            <a href="CourseDirectory.asp?QsPageNumber=<% response.write(LastPage) %>" class="">Last</a>
             <% else %>
-            <a href="CourseContent.asp?QsPageNumber=<% response.write(LastPage) %>" class="disabled">Last</a>
+            <a href="CourseDirectory.asp?QsPageNumber=<% response.write(LastPage) %>" class="disabled">Last</a>
             <% End if %>
         </div>
     </div>
