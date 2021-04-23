@@ -39,15 +39,15 @@ Set RSStdDetail = Nothing
 </head>
 <body>
     <div class="panel">
-        <div class="panel-head">
+        <div class="panel-head" onclick="CollapsePanelBody()">
             <div class="row">
                 <div class="col">
-                    Student's Detail
+                    Student's Detail (<% response.Write(StdFirstName & " " & FatherName) %>)
                 </div>
             </div>
         </div>
 
-        <div class="panel-body">
+        <div class="panel-body" id="panel-body">
             <div class="row">
                 <div class="col-2">
                     <div class="std-img">
@@ -93,4 +93,15 @@ Set RSStdDetail = Nothing
         </div>
     </div>
 </body>
+<script>
+    function CollapsePanelBody(){
+        var TargetElement = document.getElementById('panel-body')
+        if (TargetElement.style.display != 'none') {
+            TargetElement.style.display = 'none';
+        }
+        else {
+            TargetElement.style.display = 'block';
+        }
+    }
+</script>
 </html>
