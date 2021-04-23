@@ -13,6 +13,13 @@
         Session("sCourseName") = ""
         Session("sCourseCategory") = ""
         Session("sCourseSubCategory") = ""
+
+        Session("smCourseCode") = ""
+        Session("smCourseName") = ""
+        Session("smCourseCategory") = ""
+        Session("smCourseSubCategory") = ""
+        Session("smCourseDescription") = ""
+        Session("smAudience") = ""
     'end
 
     'Variable Initialization
@@ -31,6 +38,13 @@
         Session("sCourseCategory") = ValidateCategory()
         Session("sCourseSubCategory") = ValidateSubCategory()
 
+        Session("smCourseCode") = mCourseCode
+        Session("smCourseName") = mCourseName
+        Session("smCourseCategory") = mCourseCategoryId
+        Session("smCourseSubCategory") = mCourseSubCategoryId
+        Session("smCourseDescription") = mCourseDescription
+        Session("smAudience") = mAudience
+
         if ErrorFound=true then
             response.Redirect("CourseContentAdd.asp")
         end if
@@ -41,7 +55,7 @@
     'end
 
     'Insert Rec
-        QryStr = "INSERT INTO CourseContent (CourseCode, CourseName, CourseCategoryId, CourseSubCategoryId, CourseDescription, Audience, UserCreatedBy)" & _
+        QryStr = "INSERT INTO CourseContent (CourseCode, CourseName, CategoryId, SubCategoryId, CourseDescription, Audience, UserCreatedBy)" & _
                 " Values('" & mCourseCode & "', '" & mCourseName & "', " & mCourseCategoryId & ", " & mCourseSubCategoryId & ", '" & mCourseDescription & _
                 "', '" & mAudience & "', " & Session("SUserId") & ")"
 
@@ -57,25 +71,23 @@
 'Functions
 
     'ValidateCourseCode
-        function ValidateCourseCode()
-            if mCourseCode = "" then 
-                ValidateCourseCode = "Course Code cannot be Null"
+    function ValidateCourseCode()
+        if mCourseCode = "" then 
+            ValidateCourseCode = "Course Code cannot be Null"
+            ErrorFound = True
+        elseif len(mCourseCode) > 10 then
+            ValidateCourseCode = "Max Length is 10"
+            ErrorFound = True
+        else
+            Dim RSCourseCode
+            Set RSCourseCode = Server.CreateObject("ADODB.RecordSet")
+            RSCourseCode.open "SELECT * FROM CourseContent WHERE(CourseCode = '" & mCourseCode & "')", conn
+            if RSCourseCode.eof = false then
+                ValidateCourseCode = "Duplicate Course Code Found"
                 ErrorFound = True
-            elseif len(mCourseCode) > 10 then
-                ValidateCourseCode = "Max Length is 10"
-                ErrorFound = True
-            else
-                Dim RSCode
-                Set RSCode = Server.CreateObject("ADODB.RecordSet")
-                RSCode.open "SELECT * FROM CourseContent WHERE(CourseCode = '" & mCourseCode & "')", conn
-                if RSCode.eof then 
-                    ValidateCourseCode = "Duplicate Course Code Found"
-                    ErrorFound = True
-                    RSCode.close 
-                    set RSCode = Nothing
-                end if
             end if
-        end function
+        end if
+    end function
     'end
 
     'ValidateCourseName
@@ -90,8 +102,8 @@
                 Dim RSName
                 Set RSName = Server.CreateObject("ADODB.RecordSet")
                 RSName.open "SELECT * FROM CourseContent WHERE(CourseName = '" & mCourseName & "')", conn
-                if RSName.eof then
-                    ValidateCourseCode = "Duplicate Course Name Found"
+                if RSName.eof = False then
+                    ValidateCourseName = "Duplicate Course Name Found"
                     ErrorFound = True
                     RSName.close 
                     set RSName = Nothing
