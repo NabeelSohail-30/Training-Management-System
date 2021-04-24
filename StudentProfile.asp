@@ -144,16 +144,16 @@
         </section>
 
         <section class="grid">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover" style="width: 85%;">
                 <thead class="thead-light">
                     <tr>
                         <th style="width: 5%;" class="gr">GR Number</th>
                         <th style="width: 10%;" class="first">First Name</th>
                         <th style="width: 10%;" class="last">Last Name</th>
                         <th style="width: 10%;" class="nic">NIC Number</th>
-                        <th style="width: 10%;" class="father">Father Name</th>
                         <th style="width: 10%;" class="phone">Phone Number</th>
                         <th style="width: 15%;" class="email">Email Address</th>
+                        <th style="width: 10%;" class="father">Father Name</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -175,9 +175,9 @@
                         <td class="first"><% response.Write(RSStdDetail("StdFirstName")) %></td>
                         <td class="last"><% response.Write(RSStdDetail("StdLastName")) %></td>
                         <td class="nic"><% response.Write(RSStdDetail("StdNICNumber")) %></td>
-                        <td class="father"><% response.Write(RSStdDetail("FatherName")) %></td>
                         <td class="phone"><% response.Write(RSStdDetail("StdMobileNumber")) %></td>
                         <td class="email"><% response.Write(RSStdDetail("StdEmailAddress")) %></td>
+                        <td class="father"><% response.Write(RSStdDetail("FatherName")) %></td>
                     </tr>
                     <%
                                     RecNumber = RecNumber + 1
