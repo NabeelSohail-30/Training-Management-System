@@ -93,7 +93,7 @@
                             %>
                             <tr>
                                 <td><a
-                                        href="StudentCourseDetail.asp"><% response.Write(RSEnroll("StdEnrollmentId")) %></a>
+                                        href="StudentCourseDetail.asp?StdEnrollId=<% response.write(RSEnroll("StdEnrollmentId")) %>"><% response.Write(RSEnroll("StdEnrollmentId")) %></a>
                                 </td>
                                 <td><% response.Write(RSEnroll("CourseName")) %></td>
                                 <td><% response.Write(RSEnroll("StartDate")) %></td>
@@ -113,6 +113,9 @@
                     </table>
                 </div>
             </div>
+
+            <br>
+
         </div>
     </div>
 
