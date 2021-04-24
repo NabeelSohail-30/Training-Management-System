@@ -19,7 +19,7 @@ body {
     margin-top: 10px;
 }
 
-.label-data{
+.label-data {
     background-color: rgba(245, 245, 245, 0.205);
     border-color: rgba(105, 105, 105, 0.589);
 }
@@ -125,12 +125,14 @@ table {
     margin-right: 10px;
 }
 
-.error-border{
+.error-border {
     border-color: red;
 }
 
-footer{
-    margin-top: 50px;
+footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
 }
 
 .icon img {
