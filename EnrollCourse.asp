@@ -14,8 +14,17 @@ Dim MaxEnrollment
 Dim cStartDate
 Dim cEndDate
 
+Set RSTotalEnrollment = Server.CreateObject("ADODB.RecordSet")
+QryStr = "SELECT Count(StudentId) AS TotalEnrollment FROM V_StdEnrollmentView WHERE(CourseDirectoryId = " & CourseDirectoryId & ")"
+RSTotalEnrollment.Open QryStr, conn
+Dim TotEnrollment
+Dim EnrollmentAvailable
+
+
 LastEnrollmentDate = RSCourseDirectory("EnrollmentClosingDate")
 MaxEnrollment = RSCourseDirectory("MaxEnrollment")
+TotEnrollment = RSTotalEnrollment("TotalEnrollment")
+EnrollmentAvailable = cint(RSCourseDirectory("MaxEnrollment")) - cint(TotEnrollment)
 
 Dim RSEnroll
 Set RSEnroll = Server.CreateObject("ADODB.RecordSet")
@@ -393,7 +402,7 @@ end if
                     </div>
 
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-6">
                             <div class="form-group">
                                 <label for="" class="input-heading">Room</label>
                                 <label
@@ -401,19 +410,33 @@ end if
                             </div>
                         </div>
 
-                        <div class="col-4">
+                        <div class="col-6">
                             <div class="form-group">
                                 <label for="" class="input-heading">Language</label>
                                 <label
                                     class="form-control label-data"><% response.Write(RSCourseDirectory("Language")) %></label>
                             </div>
                         </div>
+                    </div>
 
+                    <div class="row">
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="" class="input-heading">Max Enrollment</label>
                                 <label
                                     class="form-control label-data"><% response.Write(RSCourseDirectory("MaxEnrollment")) %></label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="" class="input-heading">Total Enrollment</label>
+                                <label class="form-control label-data"><% response.Write(TotEnrollment) %></label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="" class="input-heading">Enrollments Available</label>
+                                <label class="form-control label-data"><% response.Write(EnrollmentAvailable) %></label>
                             </div>
                         </div>
                     </div>
@@ -446,7 +469,7 @@ end if
                 </div>
             </div>
 
-            'If Available Seats > 0
+            <% if cint(EnrollmentAvailable) > 0 then %>
             <div class="panel">
                 <br>
                 <div class="panel-head">
@@ -524,6 +547,7 @@ end if
                     </div>
                 </div>
             </div>
+            <% end if %>
 
             <% if StdFirstName <> "" then %>
             <div class="panel">
