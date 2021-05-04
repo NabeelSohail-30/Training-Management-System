@@ -13,6 +13,7 @@ Dim LastEnrollmentDate
 Dim MaxEnrollment
 Dim cStartDate
 Dim cEndDate
+Dim EnrollmentStatus
 
 Set RSTotalEnrollment = Server.CreateObject("ADODB.RecordSet")
 QryStr = "SELECT Count(StudentId) AS TotalEnrollment FROM V_StdEnrollmentView WHERE(CourseDirectoryId = " & CourseDirectoryId & ")"
@@ -25,6 +26,11 @@ LastEnrollmentDate = RSCourseDirectory("EnrollmentClosingDate")
 MaxEnrollment = RSCourseDirectory("MaxEnrollment")
 TotEnrollment = RSTotalEnrollment("TotalEnrollment")
 EnrollmentAvailable = cint(RSCourseDirectory("MaxEnrollment")) - cint(TotEnrollment)
+
+'response.write(cdate(LastEnrollmentDate))
+'response.write("<br>")
+'response.write(cdate(Date()))
+'response.write(cdate(Date()) < cdate(LastEnrollmentDate))
 
 Dim RSEnroll
 Set RSEnroll = Server.CreateObject("ADODB.RecordSet")
@@ -289,6 +295,74 @@ if Request.QueryString("Enroll")= "1" AND (Request.Form("FormStudentId") <> "") 
     'End
 end if
 
+if Request.QueryString("QsCancel") = "1" then
+    QryStr = "UPDATE StudentEnrollment Set EnrollmentStatusId = 4, UserLastUpdatedBy = " & Session("SUserId") & ", LastUpdatedDateTime = '" & Now() &"' WHERE(StdEnrollmentId = " & Request.QueryString("QsStdEnrollmentId") & ")"
+    'response.write(QryStr)
+    Conn.execute QryStr
+    response.redirect("EnrollCourse.asp?QsId=" & CourseDirectoryId)
+end if
+
+if Request.QueryString("Update") = "1" then
+    Dim uPaidFee
+    Dim uFee
+    Dim uBalanceFee
+    Dim uIsFeePaid
+    Dim uStdEnrollmentId
+
+    Session("sPaidFee") = ""
+    uFee = Request.Form("FormFee")
+    uPaidFee = Request.Form("FormPaidFee")
+    uStdEnrollmentId = Request.QueryString("QsStdEnrollmentId")
+    uBalanceFee = Request.Form("FormBalanceFee")
+
+    'uFee = 200
+    'uBalanceFee = 200
+
+    'response.write("<br>Fee = " & cdbl(uFee))
+    'response.write("<br>BalanceFee = " & cdbl(uBalanceFee))
+    'response.write("<br>")
+    'response.write(uFee = uBalanceFee)
+    'response.end
+
+    if len(uFee) > 0 then
+        if cint(uFee) <= 0 then
+            Session("sPaidFee") = "Invalid Fee! <br> Fee cannot be less than or equal to Zero."
+            response.redirect("EnrollCourse.asp?QsId=" & CourseDirectoryId & "&QsEdit=1&QsStdEnrollmentId=" & uStdEnrollmentId)
+        elseif cint(uFee) > cint(uBalanceFee) then
+            Session("sPaidFee") = "Invalid Fee! <br> Fee cannot be greater than Balance Fee."
+            response.redirect("EnrollCourse.asp?QsId=" & CourseDirectoryId & "&QsEdit=1&QsStdEnrollmentId=" & uStdEnrollmentId)
+        end if
+    else
+        Session("sPaidFee") = "Fee cannot be Null."
+        response.redirect("EnrollCourse.asp?QsId=" & CourseDirectoryId & "&QsEdit=1&QsStdEnrollmentId=" & uStdEnrollmentId)
+    end if
+
+    'response.write(uFee = uBalanceFee)
+    if uFee = uBalanceFee then
+        uPaidFee = cint(uPaidFee) + cint(uFee)
+        uBalanceFee = 0
+        uIsFeePaid = 1
+        'response.write("true Block")
+    else
+        'response.write("Else Block")
+        uPaidFee = cint(uPaidFee) + cint(uFee)
+        uBalanceFee = cint(uBalanceFee) - cint(uFee)
+        uIsFeePaid = 0
+    end if
+
+    'response.write("<br>Fee = " & uFee)
+    'response.write("<br>PaidFee = " & uPaidFee)
+    'response.write("<br>BalanceFee = " & uBalanceFee)
+    'response.write("<br>IsFeePaid = " & uIsFeePaid)
+    'response.write("<br>")
+
+    QryStr = "UPDATE StudentEnrollment Set PaidFee = " & uPaidFee & ", BalanceFee = " & uBalanceFee & ", IsFeePaid = " & uIsFeePaid & " , UserLastUpdatedBy = " & Session("SUserId") & ", LastUpdatedDateTime = '" & Now() &"' WHERE(StdEnrollmentId = " & Request.QueryString("QsStdEnrollmentId") & ")"
+    'response.write(QryStr)
+    'response.end
+    Conn.execute QryStr
+    response.redirect("EnrollCourse.asp?QsId=" & CourseDirectoryId)
+end if
+
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -469,7 +543,8 @@ end if
                 </div>
             </div>
 
-            <% if cint(EnrollmentAvailable) > 0 then %>
+            <% if (cint(EnrollmentAvailable) > 0) then %>
+            <% if (cdate(Date()) < cdate(LastEnrollmentDate)) then %>
             <div class="panel">
                 <br>
                 <div class="panel-head">
@@ -548,6 +623,7 @@ end if
                 </div>
             </div>
             <% end if %>
+            <% end if %>
 
             <% if StdFirstName <> "" then %>
             <div class="panel">
@@ -580,7 +656,8 @@ end if
                                 <input type="hidden" value="<% response.write(mStudentId) %>" name="FormStudentId">
                                 <input type="hidden" value="<% response.write(CourseDirectoryId) %>"
                                     name="FormCourseDirectoryId">
-                                <input type="hidden" name="FormCourseFee" id="" value="<% response.Write(CourseFee) %>">
+                                <input type="hidden" name="FormCourseFee" id="CourseFee"
+                                    value="<% response.Write(CourseFee) %>">
                                 <input type="hidden" name="eFormGrNumber" id=""
                                     value="<% response.Write(StdGrNumber) %>">
                                 <input type="hidden" name="eFormStdNic" id=""
@@ -591,12 +668,14 @@ end if
                                     value="<% response.Write(LastEnrollmentDate) %>">
 
                                 <label for="" class="input-heading">Fee Discount %</label>
-                                <input type="text" class="form-control" name="FormFeeDiscountPercentage">
+                                <input type="text" class="form-control" name="FormFeeDiscountPercentage"
+                                    id="FeeDiscountPercent" onchange="CalcActualFeeByPercent(this);">
                             </div>
 
                             <div class="col-6">
                                 <label for="" class="input-heading">Fee Discount (Amount)</label>
-                                <input type="text" class="form-control" name="FormFeeDiscount">
+                                <input type="text" class="form-control" name="FormFeeDiscount" id="FeeDiscount"
+                                    onchange="CalcActualFeeByAmount(this);">
                             </div>
                         </div>
 
@@ -609,17 +688,18 @@ end if
                         <div class="row">
                             <div class="col-4">
                                 <label for="" class="input-heading">Actual Fee (After Discount)</label>
-                                <input type="text" class="form-control" name="FormActualFee" disabled>
+                                <input type="text" class="form-control" name="FormActualFee" id="ActualFee" disabled>
                             </div>
 
                             <div class="col-4">
                                 <label for="" class="input-heading">Fee Paid (Amount)</label>
-                                <input type="text" class="form-control" name="FormFeePaid">
+                                <input type="text" class="form-control" id="PaidFee" name="FormFeePaid"
+                                    onchange="CalcBalanceFee(this);">
                             </div>
 
                             <div class="col-4">
                                 <label for="" class="input-heading">Balance Fee</label>
-                                <input type="text" class="form-control" name="FormBalanceFee" disabled>
+                                <input type="text" class="form-control" name="FormBalanceFee" id="BalanceFee" disabled>
                             </div>
                         </div>
 
@@ -639,6 +719,104 @@ end if
                 <% end if %>
             </div>
 
+            <% if Request.QueryString("QsEdit")= "1" then %>
+            <%
+                Dim RSEditEnrollment
+                Set RSEditEnrollment = Server.CreateObject("ADODB.RecordSet")
+                RSEditEnrollment.open "SELECT * FROM V_StdEnrollmentView WHERE(StdEnrollmentId = " & Request.QueryString("QsStdEnrollmentId") & ")", conn
+                dim StdEnrollmentId
+                StdEnrollmentId = RSEditEnrollment("StdEnrollmentId")
+            %>
+            <div class="panel">
+                <br>
+                <div class="panel-head">
+                    <div class="row">
+                        <div class="col">
+                            <label for="">Course Enrollment</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <br>
+                    <form
+                        action="EnrollCourse.asp?Update=1&QsId=<% response.Write(CourseDirectoryId) %>&QsStdEnrollmentId=<% response.write(StdEnrollmentId) %>"
+                        method="POST" style="margin: 0px 10px;">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="" class="input-heading">Fee Discount %</label>
+                                <label for=""
+                                    class="form-control label-data"><% response.write(RSEditEnrollment("FeeDiscountPercentage")) %></label>
+                            </div>
+
+                            <div class="col-6">
+                                <label for="" class="input-heading">Fee Discount (Amount)</label>
+                                <label for=""
+                                    class="form-control label-data"><% response.write(RSEditEnrollment("FeeDiscount")) %></label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="" class="input-heading">Actual Fee (After Discount)</label>
+                                <label for=""
+                                    class="form-control label-data"><% response.write(RSEditEnrollment("ActualFee")) %></label>
+                            </div>
+
+                            <div class="col-4">
+                                <label for="" class="input-heading">Fee Paid (Amount)</label>
+                                <label for=""
+                                    class="form-control label-data"><% response.write(RSEditEnrollment("PaidFee")) %></label>
+                                <input type="hidden" value="<% response.write(RSEditEnrollment("PaidFee")) %>"
+                                    name="FormPaidFee">
+                            </div>
+
+                            <div class="col-4">
+                                <label for="" class="input-heading">Balance Fee</label>
+                                <label for=""
+                                    class="form-control label-data"><% response.write(RSEditEnrollment("BalanceFee")) %></label>
+                                <input type="hidden" value="<% response.write(RSEditEnrollment("BalanceFee")) %>"
+                                    name="FormBalanceFee">
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <% if cint(RSEditEnrollment("BalanceFee")) > 0 then %>
+                        <div class="row">
+                            <div class="col-lg d-flex justify-content-center">
+                                <div class="form-group" style="width: 20%;">
+                                    <label for="" class="input-heading">Paid Fee</label>
+                                    <input type="text" class="form-control" name="FormFee">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col text-center">
+                                <span>
+                                    <% response.write(Session("sPaidFee")) %>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg d-flex justify-content-center">
+                                <input type="submit" value="Update" class="button">
+                            </div>
+                        </div>
+                        <% else %>
+                        <div class="row">
+                            <div class="col text-center">
+                                <h4><span>Your Fee is Paid, No Dues Left.</span></h4>
+                            </div>
+                        </div>
+                        <% end if %>
+                    </form>
+                </div>
+            </div>
+            <% end if %>
+
             <div class="panel">
                 <br>
                 <div class="panel-head">
@@ -654,6 +832,7 @@ end if
                     <table class="table table-bordered table-hover" style="width: 100%;">
                         <thead class="thead-light">
                             <tr>
+                                <th style="width: 0.5%;"></th>
                                 <th style="width: 3%;">GR Number</th>
                                 <th style="width: 6%;">First Name</th>
                                 <th style="width: 6%;">Last Name</th>
@@ -665,6 +844,7 @@ end if
                                 <th style="width: 3%;">Balance Fee</th>
                                 <th style="width: 2%;">Is Fee Paid</th>
                                 <th style="width: 3%;">Status</th>
+                                <th style="width: 0.5%;"></th>
                             </tr>
                         </thead>
 
@@ -673,6 +853,13 @@ end if
                                 do while NOT RSEnroll.EOF
                             %>
                             <tr>
+                                <td>
+                                    <% if RSEnroll("EnrollmentStatusId") = 1 then %>
+                                    <a
+                                        href="EnrollCourse.asp?QsEdit=1&QsId=<% response.write(CourseDirectoryId) %>&QsStdEnrollmentId=<% response.write(RSEnroll("StdEnrollmentId")) %>"><img
+                                            src="Images/edit.png" alt="" style="width: 18px; height: 18px;"></a>
+                                    <% end if %>
+                                </td>
                                 <td><% response.Write(RSEnroll("StdGrNumber")) %></td>
                                 <td><% response.Write(RSEnroll("StdFirstName")) %></td>
                                 <td><% response.Write(RSEnroll("StdLastName")) %></td>
@@ -684,6 +871,14 @@ end if
                                 <td><% response.Write(RSEnroll("BalanceFee")) %></td>
                                 <td><% response.Write(RSEnroll("IsFeePaid")) %></td>
                                 <td><% response.Write(RSEnroll("EnrollmentStatus")) %></td>
+                                <td>
+                                    <% if RSEnroll("EnrollmentStatusId") = 1 then %>
+                                    <a
+                                        href="EnrollCourse.asp?QsCancel=1&QsId=<% response.write(CourseDirectoryId) %>&QsStdEnrollmentId=<% response.write(RSEnroll("StdEnrollmentId")) %>"><img
+                                            src="Images/cancel.png" alt="" style="width: 18px; height: 18px;"
+                                            onclick="return (confirm('Do you want to Cancel the Enrollment?'));"></a>
+                                    <% end if %>
+                                </td>
                             </tr>
                             <%
                                 RSEnroll.MoveNext
@@ -832,6 +1027,9 @@ Function IsEnrollmentConflict()
     IsEnrollmentConflict = IsConflict
 end function
 %>
+
 </body>
+
+<script src="Scripts/EnrollCourse.js"></script>
 
 </html>
