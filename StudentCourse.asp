@@ -63,6 +63,11 @@
             </div>
 
             <br>
+
+            <!--#include file="PanelStdDetail.asp"-->
+
+            <br>
+
             <div class="panel">
                 <br>
                 <div class="panel-head">
