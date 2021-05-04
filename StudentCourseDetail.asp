@@ -14,6 +14,12 @@ QryStr = "SELECT * FROM V_StudentCourseDetailView WHERE(StdEnrollmentId = " & mS
 RSCourseDetail.Open QryStr, conn
 
 Dim mStudentId
+Dim mStdGrNumber
+Dim mStdFirstName
+Dim mStdDob
+Dim mStdMobile
+Dim mStdEmail
+Dim mStdFatherName
 Dim mCourseCode
 Dim mCourseName
 Dim mCourseCategory
@@ -33,6 +39,12 @@ Dim mIsFeePaid
 Dim mEnrollmentStatus
 
 mStudentId = RSCourseDetail("StudentId")
+mStdGrNumber = RSCourseDetail("StdGrNumber")
+mStdFirstName = RSCourseDetail("StdFirstName")
+mStdDob = RSCourseDetail("StdDateOfBirth")
+mStdMobile = RSCourseDetail("StdMobileNumber")
+mStdEmail = RSCourseDetail("StdEmailAddress")
+mStdFatherName = RSCourseDetail("FatherName")
 mCourseCode = RSCourseDetail("CourseCode")
 mCourseName = RSCourseDetail("CourseName")
 mCourseCategory = RSCourseDetail("Category")
@@ -72,6 +84,68 @@ mEnrollmentStatus = RSCourseDetail("EnrollmentStatus")
 
     <div class="wrapper">
         <div class="container-fluid">
+            <div class="panel">
+                <div class="panel-head" onclick="CollapsePanelBody()">
+                    <div class="row">
+                        <div class="col">
+                            Student's Detail (<% response.Write(mStdFirstName & " " & mStdFatherName) %>)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-body" id="panel-body">
+                    <div class="row">
+                        <div class="col-2">
+                            <div class="std-img">
+                            </div>
+                        </div>
+
+                        <div class="col-10 mt-3">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="" class="input-heading">Student GR Number</label>
+                                    <label for=""
+                                        class="form-control label-data"><% response.Write(mStdGrNumber) %></label>
+                                </div>
+
+                                <div class="col-4">
+                                    <label for="" class="input-heading">Student First Name</label>
+                                    <label for=""
+                                        class="form-control label-data"><% response.Write(mStdFirstName) %></label>
+                                </div>
+
+                                <div class="col-4">
+                                    <label for="" class="input-heading">Student Father Name</label>
+                                    <label for=""
+                                        class="form-control label-data"><% response.Write(mStdFatherName) %></label>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-4">
+                                    <label for="" class="input-heading">Student Date of Birth</label>
+                                    <label for="" class="form-control label-data"><% response.Write(mStdDob) %></label>
+                                </div>
+
+                                <div class="col-4">
+                                    <label for="" class="input-heading">Student Mobile Number</label>
+                                    <label for=""
+                                        class="form-control label-data"><% response.Write(mStdMobile) %></label>
+                                </div>
+
+                                <div class="col-4">
+                                    <label for="" class="input-heading">Student Email Address</label>
+                                    <label for=""
+                                        class="form-control label-data"><% response.Write(mStdEmail) %></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
             <div class="panel">
                 <div class="panel-head">
                     <div class="row">
@@ -223,5 +297,15 @@ mEnrollmentStatus = RSCourseDetail("EnrollmentStatus")
         <!--#include file=Footer.asp-->
     </footer>
 </body>
+<script>
+    function CollapsePanelBody() {
+        var TargetElement = document.getElementById('panel-body')
+        if (TargetElement.style.display != 'none') {
+            TargetElement.style.display = 'none';
+        } else {
+            TargetElement.style.display = 'block';
+        }
+    }
+</script>
 
 </html>
