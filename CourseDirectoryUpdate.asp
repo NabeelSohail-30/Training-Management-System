@@ -11,6 +11,7 @@
         dim mInstructorId
         dim mRoomId
         dim mLanguageId
+        dim mMinAttendance
         dim mMaxEnrollment
         dim mEnrollmentClosingDate
         dim mCourseDirectoryStatusId
@@ -27,6 +28,7 @@
         mInstructorId = cint(request.form("FormInstructorId"))
         mRoomId = cint(request.form("FormRoomId"))
         mLanguageId = cint(request.form("FormLanguageId"))
+        mMinAttendance = cint(request.form("FormMinAttendance"))
         mMaxEnrollment = request.form("FormMaxEnrollment")
         mEnrollmentClosingDate = request.form("FormEnrollmentClosingDate")
         mCourseFee = request.form("FormCourseFee")
@@ -94,6 +96,7 @@
         Session("smRoomId") = mRoomId
         Session("smInstructorId") = mInstructorId
         Session("smLanguageId") = mLanguageId
+        Session("smAttendance") = mMinAttendance
         Session("smMaxEnrollment") = mMaxEnrollment
         Session("smClosingDate") = mEnrollmentClosingDate
         Session("smCourseFee") = mCourseFee
@@ -112,7 +115,7 @@
         QryStr = "UPDATE CourseDirectory " & _
                 "SET CourseId = " & mCourseId & ", StartDate = '" & mStartDate & "', EndDate = '" & mEndDate & "', CourseDuration = " & mCourseDuration & _
                 ", TimeSlotId = " & mTimeSlotId & ", InstructorId = " & mInstructorId & ", RoomId = " & mRoomId & _ 
-                ", LanguageId = " & mLanguageId & ", MaxEnrollment = " & mMaxEnrollment & ", EnrollmentClosingDate = '" & mEnrollmentClosingDate & _
+                ", LanguageId = " & mLanguageId & ", MinAttendancePercentage = " & mMinAttendance & ", MaxEnrollment = " & mMaxEnrollment & ", EnrollmentClosingDate = '" & mEnrollmentClosingDate & _
                 "', CourseFee = '" & mCourseFee & "', CourseDirectoryStatusId = " & mCourseDirectoryStatusId & _
                 ", UserLastUpdatedBy = " &  Session("SUserId") & ", LastUpdatedDateTime = '" & Now() & "' WHERE(CourseDirectoryId = " & _ 
                 mCourseDirectoryId & ")"
