@@ -102,7 +102,7 @@ RSCourseDirectory.Open QryStr, conn
                     </div>
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="form-group">
                                 <label for="" class="input-heading">Time Slot</label>
                                 <label
@@ -110,16 +110,14 @@ RSCourseDirectory.Open QryStr, conn
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="form-group">
                                 <label for="" class="input-heading">Instructor Name</label>
                                 <label
                                     class="form-control"><% response.Write(RSCourseDirectory("InstructorName")) %></label>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row">
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="" class="input-heading">Room</label>
@@ -127,11 +125,21 @@ RSCourseDirectory.Open QryStr, conn
                                     class="form-control"><% response.Write(RSCourseDirectory("RoomNumber")) %></label>
                             </div>
                         </div>
+                    </div>
 
+                    <div class="row">
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="" class="input-heading">Language</label>
                                 <label class="form-control"><% response.Write(RSCourseDirectory("Language")) %></label>
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="" class="input-heading">Minimum Attendance %</label>
+                                <label
+                                    class="form-control"><% response.Write(RSCourseDirectory("MinAttendancePercentage")) %></label>
                             </div>
                         </div>
 
