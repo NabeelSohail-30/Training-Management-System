@@ -196,7 +196,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="form-group">
                                     <label for="" class="input-heading">Time Slot</label>
                                     <% if IsError = "1" then %>
@@ -259,7 +259,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="form-group">
                                     <label for="" class="input-heading">Instructor Name</label>
                                     <% if IsError = "1" then %>
@@ -317,18 +317,7 @@
                                     <% end if %>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-6">
-                                <span><% response.write(Session("sTimeSlotId")) %></span>
-                            </div>
-                            <div class="col-6">
-                                <span><% response.write(Session("sConflictedInstructor")) %></span>
-                            </div>
-                        </div>
-
-                        <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
                                     <label for="" class="input-heading">Room</label>
@@ -387,7 +376,21 @@
                                     <% end if %>
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="row">
+                            <div class="col-4">
+                                <span><% response.write(Session("sTimeSlotId")) %></span>
+                            </div>
+                            <div class="col-4">
+                                <span><% response.write(Session("sConflictedInstructor")) %></span>
+                            </div>
+                            <div class="col-4">
+                                <span><% response.write(Session("sConflictedRoom")) %></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
                                     <label for="" class="input-heading">Language</label>
@@ -449,6 +452,19 @@
 
                             <div class="col-4">
                                 <div class="form-group">
+                                    <label for="" class="input-heading">Minimum Attendance %</label>
+                                    <% if IsError = "1" then %>
+                                    <input type="text" class="form-control" name="FormMinAttendance"
+                                        value="<% response.write(Session("smAttendance")) %>">
+                                    <% else %>
+                                    <input type="text" class="form-control" name="FormMinAttendance"
+                                        value="<% response.write(RSCourseDirectory("MinAttendancePercentage")) %>">
+                                    <% end if %>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
                                     <label for="" class="input-heading">Max Enrollment</label>
                                     <% if IsError = "1" then %>
                                     <input type="text" class="form-control" name="FormMaxEnrollment"
@@ -463,10 +479,10 @@
 
                         <div class="row">
                             <div class="col-4">
-                                <span><% response.write(Session("sConflictedRoom")) %></span>
+                                <span><% response.write(Session("sLanguageId")) %></span>
                             </div>
                             <div class="col-4">
-                                <span><% response.write(Session("sLanguageId")) %></span>
+                                <span><% response.write(Session("sAttendance")) %></span>
                             </div>
                             <div class="col-4">
                                 <span><% response.write(Session("sMaxEnrollment")) %></span>
