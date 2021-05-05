@@ -10,6 +10,7 @@
         dim mInstructorId
         dim mRoomId
         dim mLanguageId
+        dim mMinAttendance
         dim mMaxEnrollment
         dim mEnrollmentClosingDate
         dim mCourseDirectoryStatusId
@@ -25,10 +26,11 @@
         mInstructorId = cint(request.form("FormInstructorId"))
         mRoomId = cint(request.form("FormRoomId"))
         mLanguageId = cint(request.form("FormLanguageId"))
+        mMinAttendance = cint(request.form("FormMinAttendance"))
         mMaxEnrollment = request.form("FormMaxEnrollment")
         mEnrollmentClosingDate = request.form("FormEnrollmentClosingDate")
         mCourseFee = request.form("FormCourseFee")
-        mCourseDirectoryStatusId = -1
+        mCourseDirectoryStatusId = 1
 
         Session("sCourseId") = ""
         Session("sStartDate") = ""
@@ -46,6 +48,7 @@
         Session("smDuration") = ""
         Session("smTimeSlotId") = ""
         Session("smLanguageId") = ""
+        Session("smAttendance") = ""
         Session("smMaxEnrollment") = ""
         Session("smClosingDate") = ""
         Session("smCourseFee") = ""
@@ -91,6 +94,7 @@
         Session("smRoomId") = mRoomId
         Session("smInstructorId") = mInstructorId
         Session("smLanguageId") = mLanguageId
+        Session("smAttendance") = mMinAttendance
         Session("smMaxEnrollment") = mMaxEnrollment
         Session("smClosingDate") = mEnrollmentClosingDate
         Session("smCourseFee") = mCourseFee
@@ -106,12 +110,13 @@
 
     'Insert Rec
         QryStr = "INSERT INTO CourseDirectory (CourseId, StartDate, EndDate, CourseDuration, TimeSlotId, InstructorId, " & _ 
-                "RoomId, LanguageId, MaxEnrollment, EnrollmentClosingDate, CourseFee, CourseDirectoryStatusId, UserCreatedBy)" & _
+                "RoomId, LanguageId, MaxEnrollment, EnrollmentClosingDate, MinAttendancePercentage, CourseFee, CourseDirectoryStatusId, UserCreatedBy)" & _
                 " Values(" & mCourseId & ", '" & mStartDate & "', '" & mEndDate & "', '" & mCourseDuration & "', " & mTimeSlotId & ", " & mInstructorId & _
-                ", " & mRoomId & ", " & mLanguageId & ", '" & mMaxEnrollment & "', '" & mEnrollmentClosingDate & "', '" & mCourseFee & "', " & _ 
+                ", " & mRoomId & ", " & mLanguageId & ", '" & mMaxEnrollment & "', '" & mEnrollmentClosingDate & "', " & mMinAttendance & ", '" & mCourseFee & "', " & _ 
                 mCourseDirectoryStatusId & ", " & Session("SUserId") & ")"
 
         'response.Write(QryStr)
+        'response.end
         conn.execute QryStr
     'end
 
