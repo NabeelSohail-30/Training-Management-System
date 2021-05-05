@@ -365,7 +365,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="form-group">
                                     <label for="" class="input-heading">Enrollment Closing Date</label>
                                     <input type="date" class="form-control" name="FormEnrollmentClosingDate"
@@ -373,7 +373,15 @@
                                 </div>
                             </div>
 
-                            <div class="col-6">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="" class="input-heading">Minimum Attendance %</label>
+                                    <input type="text" class="form-control" name="FormMinAttendance"
+                                        value="<% response.write(Session("smAttendance")) %>">
+                                </div>
+                            </div>
+
+                            <div class="col-4">
                                 <div class="form-group">
                                     <label for="" class="input-heading">Course Fee</label>
                                     <input type="text" class="form-control" name="FormCourseFee"
@@ -383,10 +391,13 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-4">
                                 <span><% response.write(Session("sClosingDate")) %></span>
                             </div>
-                            <div class="col-6">
+                            <div class="col-4">
+                                <span><% response.write(Session("smAttendance")) %></span>
+                            </div>
+                            <div class="col-4">
                                 <span><% response.write(Session("sCourseFee")) %></span>
                             </div>
                         </div>
