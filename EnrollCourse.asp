@@ -476,7 +476,7 @@ end if
                     </div>
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="form-group">
                                 <label for="" class="input-heading">Room</label>
                                 <label
@@ -484,11 +484,19 @@ end if
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="form-group">
                                 <label for="" class="input-heading">Language</label>
                                 <label
                                     class="form-control label-data"><% response.Write(RSCourseDirectory("Language")) %></label>
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="" class="input-heading">Min Attendance Percentage</label>
+                                <label
+                                    class="form-control label-data"><% response.Write(RSCourseDirectory("MinAttendancePercentage")) %></label>
                             </div>
                         </div>
                     </div>
