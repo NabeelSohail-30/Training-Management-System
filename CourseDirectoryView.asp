@@ -49,6 +49,17 @@ RSCourseDirectory.Open QryStr, conn
                                 href="EnrollCourse.asp?QsId=<% response.Write(RSCourseDirectory("CourseDirectoryId")) %>">Enroll
                                 Course</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="CourseDirectoryAttendance.asp?QsId=<% response.Write(RSCourseDirectory("CourseDirectoryId")) %>">Attendance</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="CourseDirectoryCertificate.asp?QsId=<% response.Write(RSCourseDirectory("CourseDirectoryId")) %>">Certificate
+                                Issuance</a>
+                        </li>
                     </ul>
                 </div>
             </div>
