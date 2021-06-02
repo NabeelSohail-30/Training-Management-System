@@ -16,7 +16,7 @@
     height: 300px;
 }
 
-.logo{
+.logo {
     display: none;
 }
 
@@ -49,22 +49,44 @@
     text-decoration: none;
 }
 
-marquee span{
+marquee span {
     margin-left: 40px;
     font-size: 16px;
     font-weight: bold;
 }
 
-marquee{
+marquee {
     margin-top: 0px;
     background-color: rgb(202, 202, 202);
     padding: 4px;
     border: 1px solid rgb(109, 105, 105);
 }
 
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 260px;
+    min-height: 870px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+/*.dropdown-content a:hover {
+    background-color: floralwhite;
+}
+*/
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+.dropdown:hover .dropbtn {
+    background-color: floralwhite;
+}
 
 @media (max-width:768px) {
-    .banner{
+    .banner {
         display: none;
     }
 
@@ -77,7 +99,7 @@ marquee{
         font-weight: 600;
     }
 
-    .logo{
+    .logo {
         display: block;
         text-align: center;
         font-weight: bolder;
@@ -97,7 +119,7 @@ marquee{
         font-weight: bold;
     }
 
-    .logo{
+    .logo {
         display: block;
         text-align: center;
         font-weight: bolder;
