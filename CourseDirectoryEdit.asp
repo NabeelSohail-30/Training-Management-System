@@ -54,6 +54,17 @@
                                 href="EnrollCourse.asp?QsId=<% response.Write(RSCourseDirectory("CourseDirectoryId")) %>">Enroll
                                 Course</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="CourseDirectoryAttendance.asp?QsId=<% response.Write(RSCourseDirectory("CourseDirectoryId")) %>">Attendance</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="CourseDirectoryCertificate.asp?QsId=<% response.Write(RSCourseDirectory("CourseDirectoryId")) %>">Certificate
+                                Issuance</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -589,11 +600,13 @@
                             </div>
                         </div>
 
+                        <% if RSCourseDirectory("CourseDirectoryStatusId") <> 2 then %>
                         <div class="row">
                             <div class="col-lg d-flex justify-content-center">
                                 <input type="submit" value="Update" class="button">
                             </div>
                         </div>
+                        <% end if %>
                     </form>
                 </div>
             </div>
