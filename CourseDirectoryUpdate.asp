@@ -1,6 +1,8 @@
 <!--#include file=OpenDbConn.asp-->
 <!--#include file=ReValidateLogin.asp-->
 <%
+    'Check weather course status is completed or not
+
     'Variable Declaration
         dim mCourseDirectoryId
         dim mCourseId
