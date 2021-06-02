@@ -14,6 +14,7 @@ Dim MaxEnrollment
 Dim cStartDate
 Dim cEndDate
 Dim EnrollmentStatus
+Dim mStartDate
 
 Set RSTotalEnrollment = Server.CreateObject("ADODB.RecordSet")
 QryStr = "SELECT Count(StudentId) AS TotalEnrollment FROM V_StdEnrollmentView WHERE(CourseDirectoryId = " & CourseDirectoryId & ")"
@@ -26,6 +27,7 @@ LastEnrollmentDate = RSCourseDirectory("EnrollmentClosingDate")
 MaxEnrollment = RSCourseDirectory("MaxEnrollment")
 TotEnrollment = RSTotalEnrollment("TotalEnrollment")
 EnrollmentAvailable = cint(RSCourseDirectory("MaxEnrollment")) - cint(TotEnrollment)
+mStartDate = RSCourseDirectory("StartDate")
 
 'response.write(cdate(LastEnrollmentDate))
 'response.write("<br>")
@@ -300,6 +302,11 @@ if Request.QueryString("QsCancel") = "1" then
     'response.write(QryStr)
     Conn.execute QryStr
     response.redirect("EnrollCourse.asp?QsId=" & CourseDirectoryId)
+elseif Request.QueryString("QsCancel") = "2" then
+    QryStr = "UPDATE StudentEnrollment Set EnrollmentStatusId = 6, UserLastUpdatedBy = " & Session("SUserId") & ", LastUpdatedDateTime = '" & Now() &"' WHERE(StdEnrollmentId = " & Request.QueryString("QsStdEnrollmentId") & ")"
+    response.write(QryStr)
+    Conn.execute QryStr
+    response.redirect("EnrollCourse.asp?QsId=" & CourseDirectoryId)
 end if
 
 if Request.QueryString("Update") = "1" then
@@ -402,6 +409,17 @@ end if
                             <a class="nav-link active"
                                 href="EnrollCourse.asp?QsId=<% response.Write(RSCourseDirectory("CourseDirectoryId")) %>">Enroll
                                 Course</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="CourseDirectoryAttendance.asp?QsId=<% response.Write(RSCourseDirectory("CourseDirectoryId")) %>">Attendance</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="CourseDirectoryCertificate.asp?QsId=<% response.Write(RSCourseDirectory("CourseDirectoryId")) %>">Certificate
+                                Issuance</a>
                         </li>
                     </ul>
                 </div>
@@ -862,7 +880,7 @@ end if
                             %>
                             <tr>
                                 <td>
-                                    <% if RSEnroll("EnrollmentStatusId") = 1 then %>
+                                    <% if (RSEnroll("EnrollmentStatusId") <> 4) AND (RSEnroll("IsFeePaid") = "False") then %>
                                     <a
                                         href="EnrollCourse.asp?QsEdit=1&QsId=<% response.write(CourseDirectoryId) %>&QsStdEnrollmentId=<% response.write(RSEnroll("StdEnrollmentId")) %>"><img
                                             src="Images/edit.png" alt="" style="width: 18px; height: 18px;"></a>
@@ -880,10 +898,17 @@ end if
                                 <td><% response.Write(RSEnroll("IsFeePaid")) %></td>
                                 <td><% response.Write(RSEnroll("EnrollmentStatus")) %></td>
                                 <td>
-                                    <% if RSEnroll("EnrollmentStatusId") = 1 then %>
+                                    <% if RSEnroll("EnrollmentStatusId") = 1 AND cdate(Date()) >= cdate(mStartDate) then %>
+                                    <a
+                                        href="EnrollCourse.asp?QsCancel=2&QsId=<% response.write(CourseDirectoryId) %>&QsStdEnrollmentId=<% response.write(RSEnroll("StdEnrollmentId")) %>"><img
+                                            src="Images/cancel.png" title="Click to Drop Out"
+                                            style="width: 18px; height: 18px;"
+                                            onclick="return (confirm('Do you want to Drop Out the Course?'));"></a>
+                                    <% elseif RSEnroll("EnrollmentStatusId") = 1 AND cdate(Date()) <= cdate(mStartDate) then %>
                                     <a
                                         href="EnrollCourse.asp?QsCancel=1&QsId=<% response.write(CourseDirectoryId) %>&QsStdEnrollmentId=<% response.write(RSEnroll("StdEnrollmentId")) %>"><img
-                                            src="Images/cancel.png" alt="" style="width: 18px; height: 18px;"
+                                            src="Images/cancel.png" title="Click to cancel"
+                                            style="width: 18px; height: 18px;"
                                             onclick="return (confirm('Do you want to Cancel the Enrollment?'));"></a>
                                     <% end if %>
                                 </td>
