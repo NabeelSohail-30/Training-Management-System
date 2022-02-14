@@ -1,6 +1,7 @@
 <!--#include file=OpenDbConn.asp-->
 <!--#include file=ReValidateLogin.asp-->
 <%
+if Session("SUserRoleId") <> 2 then
     'Variables Declaration Start
         'Memory Variables
             Dim StdGrNum
@@ -601,4 +602,7 @@
     'CloseAllRS
         
     'End
+else
+Response.redirect("Dashboard.asp")
+end if
 %>

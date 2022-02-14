@@ -1,6 +1,7 @@
 <!--#include file=OpenDbConn.asp-->
 <!--#include file=ReValidateLogin.asp-->
 <%
+if Session("SUserRoleId") <> 2 then
     'Variable Declaration
         dim mCourseCode
         dim mCourseName
@@ -147,4 +148,7 @@
     'end
 
 'end
+else
+response.redirect("dashboard.asp")
+end if
 %>

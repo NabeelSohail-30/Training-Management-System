@@ -4,50 +4,50 @@
 <%
 if Session("SUserRoleId") <> 2 then
 call OpenDbConn()
-Dim RSMaritalStatus
-Set RSMaritalStatus = Server.CreateObject("ADODB.RecordSet")
-QryStr = "SELECT * FROM ListMaritalStatus"
-RSMaritalStatus.Open QryStr, conn
+Dim RSQualifications
+Set RSQualifications = Server.CreateObject("ADODB.RecordSet")
+QryStr = "SELECT * FROM ListQualifications"
+RSQualifications.Open QryStr, conn
 
 if Request.QueryString("QsAction") = "1" then
-    Dim mMaritalStatus
-    mMaritalStatus = Request.form("FormMaritalStatus")
-    Session("sMaritalStatus") = ""
+    Dim mQualifications
+    mQualifications = Request.form("FormQualifications")
+    Session("sQualifications") = ""
 
-    if mMaritalStatus = "" OR Len(mMaritalStatus) = 0 then
-        Session("sMaritalStatus") = "Marital Status cannot be NULL"
-        response.redirect("ListMaritalStatus.asp")
+    if mQualifications = "" OR Len(mQualifications) = 0 then
+        Session("sQualifications") = "Qualifications cannot be NULL"
+        response.redirect("ListQualifications.asp")
     else
-        Session("sMaritalStatus") = ""
+        Session("sQualifications") = ""
     end if
 
-    QryStr = "INSERT INTO ListMaritalStatus(MaritalStatus, UserCreatedBy, CreationDateTime)" & _
-            " Values('" & mMaritalStatus & "', " & Session("SUserId") & ", '" & Now() & "')"
+    QryStr = "INSERT INTO ListQualifications(Qualifications, UserCreatedBy, CreationDateTime)" & _
+            " Values('" & mQualifications & "', " & Session("SUserId") & ", '" & Now() & "')"
     'response.write(QryStr)
     Conn.execute QryStr
-    response.redirect("ListMaritalStatus.asp")
+    response.redirect("ListQualifications.asp")
 end if
 
 if Request.QueryString("QsAction") = "3" then
-    'Dim mMaritalStatus
-    Dim mMaritalStatusId
-    mMaritalStatus = Request.form("FormMaritalStatus")
-    mMaritalStatusId = Request.form("FormMaritalStatusId")
-    Session("sMaritalStatus") = ""
+    'Dim mQualifications
+    Dim mQualificationId
+    mQualifications = Request.form("FormQualifications")
+    mQualificationId = Request.form("FormQualificationId")
+    Session("sQualifications") = ""
 
-    if mMaritalStatus = "" OR Len(mMaritalStatus) = 0 then
-        Session("sMaritalStatus") = "Marital Status cannot be NULL"
-        response.redirect("ListMaritalStatus.asp?QsAction=2&QsId=" & mMaritalStatusId)
+    if mQualifications = "" OR Len(mQualifications) = 0 then
+        Session("sQualifications") = "Qualifications cannot be NULL"
+        response.redirect("ListQualifications.asp?QsAction=2&QsId=" & mQualificationId)
     else
-        Session("sMaritalStatus") = ""
+        Session("sQualifications") = ""
     end if
 
-    QryStr = "UPDATE ListMaritalStatus SET MaritalStatus = '" & mMaritalStatus & "', UserLastUpdatedBy = " & Session("SUserId") & _
-                ", LastUpdatedDateTime = '" & Now() & "' WHERE(MaritalStatusId = " & mMaritalStatusId & ")"
+    QryStr = "UPDATE ListQualifications SET Qualifications = '" & mQualifications & "', UserLastUpdatedBy = " & Session("SUserId") & _
+                ", LastUpdatedDateTime = '" & Now() & "' WHERE(QualificationId = " & mQualificationId & ")"
 
     'response.write(QryStr)
     Conn.execute QryStr
-    response.redirect("ListMaritalStatus.asp")
+    response.redirect("ListQualifications.asp")
 end if
 
 %>
@@ -61,7 +61,7 @@ end if
     <link rel="stylesheet" href="CSS/bootstrap.css">
     <link rel="stylesheet" href="CSS/GlobalStyle.css">
     <link rel="stylesheet" href="CSS/StyleAddCourseDir.css">
-    <title>Marital Status</title>
+    <title>Qualifications</title>
 </head>
 
 <body>
@@ -74,17 +74,17 @@ end if
 
             <% 
             if request.QueryString("QsAction") = "2" then 
-                Dim RSEditMaritalStatus
-                Set RSEditMaritalStatus = Server.CreateObject("ADODB.RecordSet")
-                RSEditMaritalStatus.Open "SELECT MaritalStatusId, MaritalStatus FROM ListMaritalStatus WHERE (MaritalStatusId = " & Request.QueryString("QsId") & ")", conn
+                Dim RSEditQualification
+                Set RSEditQualification = Server.CreateObject("ADODB.RecordSet")
+                RSEditQualification.Open "SELECT QualificationId, Qualifications FROM ListQualifications WHERE (QualificationId = " & Request.QueryString("QsId") & ")", conn
             %>
-            <form action="ListMaritalStatus.asp?QsAction=3" method="POST">
+            <form action="ListQualifications.asp?QsAction=3" method="POST">
                 <div class="panel">
                     <br>
                     <div class="panel-head">
                         <div class="row">
                             <div class="col">
-                                <label for="">Edit Marital Status</label>
+                                <label for="">Edit Qualifications</label>
                             </div>
                         </div>
                     </div>
@@ -93,12 +93,12 @@ end if
                         <br>
                         <div class="row mt-2 d-flex justify-content-center">
                             <div class="col-6">
-                                <label for="" class="input-heading">Marital Status</label>
-                                <input for="" class="form-control" name="FormMaritalStatus"
-                                    value="<% response.write(RSEditMaritalStatus("MaritalStatus")) %>"></input>
-                                <span><% response.write(Session("sMaritalStatus")) %></span>
-                                <input type="hidden" name="FormMaritalStatusId"
-                                    value="<% response.write(RSEditMaritalStatus("MaritalStatusId")) %>">
+                                <label for="" class="input-heading">Qualifications</label>
+                                <input for="" class="form-control" name="FormQualifications"
+                                    value="<% response.write(RSEditQualification("Qualifications")) %>"></input>
+                                <span><% response.write(Session("sQualifications")) %></span>
+                                <input type="hidden" name="FormQualificationId"
+                                    value="<% response.write(RSEditQualification("QualificationId")) %>">
                             </div>
                         </div>
                         <div class="row">
@@ -110,17 +110,17 @@ end if
                 </div>
             </form>
             <%
-            RSEditMaritalStatus.close
-            set RSEditMaritalStatus = Nothing
+            RSEditQualification.close
+            set RSEditQualification = Nothing
             %>
             <% else %>
-            <form action="ListMaritalStatus.asp?QsAction=1" method="POST">
+            <form action="ListQualifications.asp?QsAction=1" method="POST">
                 <div class="panel">
                     <br>
                     <div class="panel-head">
                         <div class="row">
                             <div class="col">
-                                <label for="">Add New Marital Status</label>
+                                <label for="">Add New Qualifications</label>
                             </div>
                         </div>
                     </div>
@@ -129,9 +129,9 @@ end if
                         <br>
                         <div class="row mt-2 d-flex justify-content-center">
                             <div class="col-6">
-                                <label for="" class="input-heading">Marital Status</label>
-                                <input for="" class="form-control" name="FormMaritalStatus"></input>
-                                <span><% response.write(Session("sMaritalStatus")) %></span>
+                                <label for="" class="input-heading">Qualifications</label>
+                                <input for="" class="form-control" name="FormQualifications"></input>
+                                <span><% response.write(Session("sQualifications")) %></span>
                             </div>
                         </div>
                         <div class="row">
@@ -149,7 +149,7 @@ end if
                 <div class="panel-head">
                     <div class="row">
                         <div class="col">
-                            <label for="">Marital Status</label>
+                            <label for="">Qualifications</label>
                         </div>
                     </div>
                 </div>
@@ -159,32 +159,32 @@ end if
                     <table class="table table-bordered table-hover" style="width: 60%;">
                         <thead>
                             <tr>
-                                <th style="width: 3%;">Marital Status Id</th>
-                                <th style="width: 5%;">Marital Status</th>
+                                <th style="width: 3%;">Qualifications Id</th>
+                                <th style="width: 5%;">Qualifications</th>
                                 <th style="width: 0.5%"></th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <%
-                                do while NOT RSMaritalStatus.EOF
+                                do while NOT RSQualifications.EOF
                             %>
                             <tr>
-                                <td><% response.write(RSMaritalStatus("MaritalStatusId")) %></td>
-                                <td><% response.write(RSMaritalStatus("MaritalStatus")) %></td>
+                                <td><% response.write(RSQualifications("QualificationId")) %></td>
+                                <td><% response.write(RSQualifications("Qualifications")) %></td>
                                 <td>
                                     <a
-                                        href="ListMaritalStatus.asp?QsAction=2&QsId=<% response.write(RSMaritalStatus("MaritalStatusId")) %>">
+                                        href="ListQualifications.asp?QsAction=2&QsId=<% response.write(RSQualifications("QualificationId")) %>">
                                         <img src="Images/edit.png" alt="" width="20px" height="20px">
                                     </a>
                                 </td>
                             </tr>
                             <%
-                                RSMaritalStatus.MoveNext
+                                RSQualifications.MoveNext
                                 Loop
 
-                                RSMaritalStatus.close
-                                set RSMaritalStatus = Nothing
+                                RSQualifications.close
+                                set RSQualifications = Nothing
                             %>
                         </tbody>
                     </table>

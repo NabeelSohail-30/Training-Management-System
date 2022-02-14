@@ -1,0 +1,30 @@
+body {
+    margin-top: 10px;
+}
+
+table {
+    margin: auto;
+    margin-top: 20px;
+}
+
+h3 {
+    margin: 10px auto 40px;
+}
+
+table h4 {
+    margin-top: 20px;
+}
+
+hr {
+    width: 90%;
+    border: 1px solid black;
+    margin: 40px auto;
+}
+
+.panel-head {
+    font-size: 26px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+}

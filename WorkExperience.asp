@@ -95,6 +95,7 @@
 
             <br>
 
+            <% if Session("SUserRoleId") <> 2 then %>
             <% if request.QueryString("Action")="2" AND request.QueryString("EditForm")="true" then %>
             <div class="panel">
                 <div class="panel-head">
@@ -300,6 +301,7 @@
                 </div>
             </div>
             <% end if %>
+            <% end if %>
 
             <%
                 Dim RSWorkExperience
@@ -332,12 +334,17 @@
                         <tbody>
                             <% do while NOT RSWorkExperience.EOF %>
                             <tr>
+                                <% if Session("SUserRoleId") <> 2 then %>
                                 <td><a
                                         href="WorkExperience.asp?QsStdId=<% response.write(StdId) %>&Action=2&EditForm=true&QsWorkExperienceId=<% response.write(RSWorkExperience("WorkExperienceId")) %>"><img
                                             src="Images/edit.png" alt="" width="20px" height="20px"></a></td>
                                 <td><a
                                         href="WorkExperience.asp?QsStdId=<% response.write(StdId) %>&Action=3&QsWorkExperienceId=<% response.write(RSWorkExperience("WorkExperienceId")) %>"><img
                                             src="Images/delete.png" alt="" width="20px" height="20px"></a></td>
+                                <% else %>
+                                <td></td>
+                                <td></td>
+                                <% end if %>
                                 <td class="start"><% response.write(RSWorkExperience("StartDate")) %></td>
                                 <td class="end"><% response.write(RSWorkExperience("EndDate")) %></td>
                                 <td class="comp"><% response.write(RSWorkExperience("CompanyName")) %></td>

@@ -171,10 +171,12 @@
                     <input type="submit" name="" id="" class="search-btn" value="Search">
                 </form>
             </div>
+            <% if Session("SUserRoleId") <> 2 then %>
             <div class="btn">
                 <a href="CourseContentAdd.asp" class="add-new" title="Add New Course"><img src="Images/Add.svg" alt=""
                         title="Add New Course" width="26px" height="26px"> New Course</a>
             </div>
+            <% end if %>
         </section>
 
         <section class="grid">

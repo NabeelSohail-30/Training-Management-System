@@ -1,5 +1,6 @@
 <!--#include file=OpenDbConn.asp-->
 <!--#include file=ReValidateLogin.asp-->
+<% if Session("SUserRoleId") <> 2 then %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,7 +20,6 @@
     <div class="container-fluid">
         <div class="wrapper">
             <form action="AddNewStd.asp" method="POST">
-
                 <div class="row">
                     <div class="col text-center mt-2">
                         <label for="" class="heading">Student's Details</label>
@@ -565,3 +565,8 @@
 <!--onclick="return FormSubmit();"-->
 
 </html>
+<% 
+else
+    Response.redirect("Dashboard.asp")
+end if
+%>

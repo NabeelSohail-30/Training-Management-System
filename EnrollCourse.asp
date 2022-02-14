@@ -41,6 +41,7 @@ RSEnroll.open "SELECT * FROM V_StdEnrollmentView WHERE(CourseDirectoryId = " & C
 dim CourseFee
 CourseFee = RSCourseDirectory("CourseFee")
 
+
 'Declaring Variables of Student Filtration
     dim mStudentId
     dim StdGrNumber
@@ -54,12 +55,15 @@ CourseFee = RSCourseDirectory("CourseFee")
     StdNotFound = ""
 'end
 
+if Session("SUserRoleId") <> 2 then
 'Start Student Filtration for Enrollment
 if Request.QueryString("Filter")= "1" AND (Request("FormGrNumber") <> "" or Request("FormStdNIC") <> "" or Request("FormStdEmail") <> "") then
     FilterStudent()
 end if
 'End Student Filtration for Enrollment
+end if
 
+if Session("SUserRoleId") <> 2 then
 if Request.QueryString("Enroll")= "1" AND (Request.Form("FormStudentId") <> "") then
     'Variables Declaration
         dim eStudentId
@@ -296,7 +300,9 @@ if Request.QueryString("Enroll")= "1" AND (Request.Form("FormStudentId") <> "") 
     response.redirect("EnrollCourse.asp?QsId=" & mCourseDirectoryId)
     'End
 end if
+end if
 
+if Session("SUserRoleId") <> 2 then
 if Request.QueryString("QsCancel") = "1" then
     QryStr = "UPDATE StudentEnrollment Set EnrollmentStatusId = 4, UserLastUpdatedBy = " & Session("SUserId") & ", LastUpdatedDateTime = '" & Now() &"' WHERE(StdEnrollmentId = " & Request.QueryString("QsStdEnrollmentId") & ")"
     'response.write(QryStr)
@@ -308,7 +314,9 @@ elseif Request.QueryString("QsCancel") = "2" then
     Conn.execute QryStr
     response.redirect("EnrollCourse.asp?QsId=" & CourseDirectoryId)
 end if
+end if
 
+if Session("SUserRoleId") <> 2 then
 if Request.QueryString("Update") = "1" then
     Dim uPaidFee
     Dim uFee
@@ -369,7 +377,7 @@ if Request.QueryString("Update") = "1" then
     Conn.execute QryStr
     response.redirect("EnrollCourse.asp?QsId=" & CourseDirectoryId)
 end if
-
+end if
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -380,7 +388,7 @@ end if
     <link rel="stylesheet" href="CSS/bootstrap.css">
     <link rel="stylesheet" href="CSS/GlobalStyle.css">
     <link rel="stylesheet" href="CSS/StyleAddCourseDir.css">
-    <title>View Course Directory</title>
+    <title>Enroll Course Directory</title>
 </head>
 
 <body>
@@ -438,7 +446,6 @@ end if
                 </div>
 
                 <div class="panel-body">
-                    <br>
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
@@ -569,6 +576,7 @@ end if
                 </div>
             </div>
 
+            <% if Session("SUserRoleId") <> 2 then %>
             <% if (cint(EnrollmentAvailable) > 0) then %>
             <% if (cdate(Date()) < cdate(LastEnrollmentDate)) then %>
             <div class="panel">
@@ -747,12 +755,12 @@ end if
 
             <% if Request.QueryString("QsEdit")= "1" then %>
             <%
-                Dim RSEditEnrollment
-                Set RSEditEnrollment = Server.CreateObject("ADODB.RecordSet")
-                RSEditEnrollment.open "SELECT * FROM V_StdEnrollmentView WHERE(StdEnrollmentId = " & Request.QueryString("QsStdEnrollmentId") & ")", conn
-                dim StdEnrollmentId
-                StdEnrollmentId = RSEditEnrollment("StdEnrollmentId")
-            %>
+                    Dim RSEditEnrollment
+                    Set RSEditEnrollment = Server.CreateObject("ADODB.RecordSet")
+                    RSEditEnrollment.open "SELECT * FROM V_StdEnrollmentView WHERE(StdEnrollmentId = " & Request.QueryString("QsStdEnrollmentId") & ")", conn
+                    dim StdEnrollmentId
+                    StdEnrollmentId = RSEditEnrollment("StdEnrollmentId")
+                %>
             <div class="panel">
                 <br>
                 <div class="panel-head">
@@ -842,6 +850,7 @@ end if
                 </div>
             </div>
             <% end if %>
+            <% end if %>
 
             <div class="panel">
                 <br>
@@ -880,10 +889,12 @@ end if
                             %>
                             <tr>
                                 <td>
+                                    <% if Session("SUserRoleId") <> 2 then %>
                                     <% if (RSEnroll("EnrollmentStatusId") <> 4) AND (RSEnroll("IsFeePaid") = "False") then %>
                                     <a
                                         href="EnrollCourse.asp?QsEdit=1&QsId=<% response.write(CourseDirectoryId) %>&QsStdEnrollmentId=<% response.write(RSEnroll("StdEnrollmentId")) %>"><img
                                             src="Images/edit.png" alt="" style="width: 18px; height: 18px;"></a>
+                                    <% end if %>
                                     <% end if %>
                                 </td>
                                 <td><% response.Write(RSEnroll("StdGrNumber")) %></td>
@@ -898,6 +909,7 @@ end if
                                 <td><% response.Write(RSEnroll("IsFeePaid")) %></td>
                                 <td><% response.Write(RSEnroll("EnrollmentStatus")) %></td>
                                 <td>
+                                    <% if Session("SUserRoleId") <> 2 then %>
                                     <% if RSEnroll("EnrollmentStatusId") = 1 AND cdate(Date()) >= cdate(mStartDate) then %>
                                     <a
                                         href="EnrollCourse.asp?QsCancel=2&QsId=<% response.write(CourseDirectoryId) %>&QsStdEnrollmentId=<% response.write(RSEnroll("StdEnrollmentId")) %>"><img
@@ -910,6 +922,7 @@ end if
                                             src="Images/cancel.png" title="Click to cancel"
                                             style="width: 18px; height: 18px;"
                                             onclick="return (confirm('Do you want to Cancel the Enrollment?'));"></a>
+                                    <% end if %>
                                     <% end if %>
                                 </td>
                             </tr>

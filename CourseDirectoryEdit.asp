@@ -600,12 +600,14 @@
                             </div>
                         </div>
 
+                        <% if Session("SUserRoleId") <> 2 then %>
                         <% if RSCourseDirectory("CourseDirectoryStatusId") <> 2 then %>
                         <div class="row">
                             <div class="col-lg d-flex justify-content-center">
                                 <input type="submit" value="Update" class="button">
                             </div>
                         </div>
+                        <% end if %>
                         <% end if %>
                     </form>
                 </div>

@@ -754,6 +754,7 @@
                     </div>
                 </div>
 
+                <% if Session("SUserRoleId") <> 2 then %>
                 <div class="row">
                     <div class="col">
                         <div class="form-group d-flex justify-content-center">
@@ -761,6 +762,7 @@
                         </div>
                     </div>
                 </div>
+                <% end if %>
             </form>
         </div>
     </div>

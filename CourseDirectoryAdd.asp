@@ -1,7 +1,7 @@
 <!--#include file=OpenDbConn.asp-->
 <!--#include file=ReValidateLogin.asp-->
 <%
-
+if Session("SUserRoleId") <> 2 then
     dim mCourseCategoryId
     dim mCourseSubCategoryId
     dim ConditionCatg
@@ -418,5 +418,10 @@
         <!--#include file=Footer.asp-->
     </footer>
 </body>
+<%
+else
+response.redirect("dashboard.asp")
+end if
+%>
 
 </html>

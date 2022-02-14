@@ -2,6 +2,7 @@
 <!--#include file=ReValidateLogin.asp-->
 <%
 
+if Session("SUserRoleId") <> 2 then
     'Variables Declaration Start
         'Memory Variables
             Dim StdId
@@ -586,4 +587,7 @@
             Conn.Execute QryStr
         End sub
     'End
+else
+response.Redirect("dashboard.asp")
+end if
 %>

@@ -1,5 +1,6 @@
 <!--#include file=OpenDbConn.asp-->
 <!--#include file=ReValidateLogin.asp-->
+<% if Session("SUserRoleId") <> 2 then %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -180,5 +181,10 @@
         <!--#include file=Footer.asp-->
     </footer>
 </body>
+<% 
+else
+response.redirect("dashboard.asp")
+end if
+%>
 
 </html>

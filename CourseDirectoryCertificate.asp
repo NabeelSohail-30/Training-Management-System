@@ -14,6 +14,7 @@ Dim RSEnroll
 Set RSEnroll = Server.CreateObject("ADODB.RecordSet")
 RSEnroll.open "SELECT * FROM V_StdEnrollmentView WHERE(CourseDirectoryId = " & CourseDirectoryId & ") AND (EnrollmentStatusId = 5)", conn
 
+if Session("SUserRoleId") <> 2 then
 if Request.QueryString("QsIssue") = 1 then
     Dim StdEnrollmentId
     StdEnrollmentId = Request.QueryString("QsStdEnrollmentId")
@@ -49,6 +50,7 @@ if Request.QueryString("QsIssue") = 2 then
 
     Response.Redirect("CourseDirectoryCertificate.asp?QsId=" & CourseDirectoryId)
 end if
+end if
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,7 +61,7 @@ end if
     <link rel="stylesheet" href="CSS/bootstrap.css">
     <link rel="stylesheet" href="CSS/GlobalStyle.css">
     <link rel="stylesheet" href="CSS/StyleAddCourseDir.css">
-    <title>View Course Directory</title>
+    <title>Course Directory Certificate</title>
 </head>
 
 <body>
@@ -248,12 +250,14 @@ end if
                 <div class="panel-body">
                     <br>
 
+                    <% if Session("SUserRoleId") <> 2 then %>
                     <div class="row">
                         <div class="col-lg d-flex justify-content-center text-center">
                             <a href="CourseDirectoryCertificate.asp?QsIssue=2&QsId=<% response.write(CourseDirectoryId) %>"
                                 class="button" style="width: 20%;">Issue Certificate to All</a>
                         </div>
                     </div>
+                    <% end if %>
 
                     <table class="table table-bordered table-hover" style="width: 100%;">
                         <thead class="thead-light">
@@ -284,10 +288,12 @@ end if
                                 <td><% response.Write(RSEnroll("IsCertificateIssued")) %></td>
                                 <td><% response.Write(RSEnroll("EnrollmentStatus")) %></td>
                                 <td>
+                                    <% if Session("SUserRoleId") <> 2 then %>
                                     <% if (RSEnroll("IsFeePaid") = "True") AND (RSEnroll("IsCertificateIssued") = "False") then %>
                                     <a
                                         href="CourseDirectoryCertificate.asp?QsIssue=1&QsId=<% response.write(CourseDirectoryId) %>&QsStdEnrollmentId=<% response.write(RSEnroll("StdEnrollmentId")) %>">Issue
                                         Certificate</a>
+                                    <% end if %>
                                     <% end if %>
                                 </td>
                             </tr>

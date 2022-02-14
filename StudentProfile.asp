@@ -137,10 +137,12 @@
                     <input type="submit" name="" id="" class="search-btn" value="Search">
                 </form>
             </div>
+            <% if Session("SUserRoleId") <> 2 then %>
             <div class="btn">
                 <a href="AddNewStdProfile.asp" class="add-new" title="Add New Student Profile"><img src="Images/Add.svg"
                         alt="" title="Add New Student Profile" width="26px" height="26px"> New Student</a>
             </div>
+            <% end if %>
         </section>
 
         <section class="grid">
@@ -169,8 +171,9 @@
                                 StdId = RSStdDetail("StudentId")
                         %>
                     <tr>
-                        <td class="gr"><a
-                                href="ViewStudentDetail.asp?QsStdId=<% response.Write(StdId) %>"><% response.Write(RSStdDetail("StdGrNumber")) %></a>
+                        <td class="gr">
+                            <a href="ViewStudentDetail.asp?QsStdId=<% response.Write(StdId) %>"><% response.Write(RSStdDetail("StdGrNumber")) %>
+                            </a>
                         </td>
                         <td class="first"><% response.Write(RSStdDetail("StdFirstName")) %></td>
                         <td class="last"><% response.Write(RSStdDetail("StdLastName")) %></td>

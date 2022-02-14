@@ -22,7 +22,7 @@
     'end
 
     
-
+if Session("SUserRoleId") <> 2 then
     if request.QueryString("Action")="1" then   'Action:1 = Add Academic Qualification
         call InsertAcd()
     elseif request.QueryString("Action")="2" AND request.QueryString("EditForm")="true" then    'Action:2, EditForm:True = Fill Edit Academic Qualification
@@ -42,6 +42,8 @@
     elseif request.QueryString("Action")="3" then
         call DelAcd()
     end if
+end if
+
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -101,6 +103,7 @@
 
             <br>
 
+            <% if Session("SUserRoleId") <> 2 then %>
             <% if request.QueryString("Action")="2" AND request.QueryString("EditForm")="true" then %>
             <div class="panel">
                 <div class="panel-head">
@@ -406,7 +409,7 @@
                 </div>
             </div>
             <% end if %>
-
+            <% end if %>
 
             <%
                 Dim RSStdAcdQual
@@ -441,6 +444,7 @@
                         <tbody>
                             <% do while NOT RSStdAcdQual.EOF %>
                             <tr>
+                                <% if Session("SUserRoleId") <> 2 then %>
                                 <td><a
                                         href="AcademicQualification.asp?QsStdId=<% response.write(StdId) %>&Action=2&EditForm=true&QsAcdId=<% response.write(RSStdAcdQual("AcdQualificationId")) %>"><img
                                             src="Images/edit.png" alt="" width="20px" height="20px"></a></td>
@@ -449,6 +453,10 @@
                                         onclick="return window.confirm('Are you sure to delete?\nPress OK to Delete');">
                                         <img src="
                                         Images/delete.png" alt="" width="20px" height="20px"></a></td>
+                                <% else %>
+                                <td></td>
+                                <td></td>
+                                <% end if %>
                                 <td class="qualf"><% response.write(RSStdAcdQual("Qualifications")) %></td>
                                 <td class="major"><% response.write(RSStdAcdQual("Major")) %></td>
                                 <td class="inst"><% response.write(RSStdAcdQual("InstituteName")) %></td>

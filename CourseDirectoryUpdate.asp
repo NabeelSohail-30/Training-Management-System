@@ -1,6 +1,7 @@
 <!--#include file=OpenDbConn.asp-->
 <!--#include file=ReValidateLogin.asp-->
 <%
+if Session("SUserRoleId") <> 2 then
     'Check weather course status is completed or not
 
     'Variable Declaration
@@ -357,4 +358,8 @@ Function IsInstructorConflict()
     set RSFilterRec = Nothing
     IsInstructorConflict = IsConflict
 end function
+
+else
+response.redirect("dashboard.asp")
+end if
 %>

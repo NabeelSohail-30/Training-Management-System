@@ -65,7 +65,7 @@
 
 QryStr = "SELECT LoginUsersDetail.LoginId, LoginUsersDetail.LoginEmail, LoginUsersDetail.UserFullName, LoginUsersDetail.LoginPassword, LoginUsersDetail.UserRoleId, LoginUserRole.Role, LoginUsersDetail.IsActive" & _ 
         " FROM LoginUserRole INNER JOIN " & _
-        "LoginUsersDetail ON LoginUserRole.LoginId = LoginUsersDetail.LoginId" & _
+        "LoginUsersDetail ON LoginUserRole.RoleId = LoginUsersDetail.UserRoleId" & _
         " WHERE (LoginEmail = '" & UserEmail & "') AND (LoginPassword = '" & UserPass & "') AND (IsActive <> 0)" 
 
         'response.Write(QryStr)

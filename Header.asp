@@ -39,27 +39,14 @@
                         <a href="CourseDirectory.asp">Course Directory</a>
                     </li>
 
-                    <li class="dropdown">
-                        <a href="" class="dropbtn">Data Lists</a>
-                        <ul class="dropdown-content">
-                            <li><a href="ListCourseCategory.asp">List Course Category</a></li>
-                            <li><a href="ListCourseSubCategory.asp">List Course Sub Category</a></li>
-                            <li><a href="ListCourseDirectoryStatus.asp">List Course Directory Status</a></li>
-                            <li><a href="ListEnrollmentStatus.asp">List Enrollment Status</a></li>
-                            <li><a href="ListGender.asp">List Gender</a></li>
-                            <li><a href="ListInstructor.asp">List Instructor</a></li>
-                            <li><a href="ListJobDesignation.asp">List Job Designation</a></li>
-                            <li><a href="ListLanguage.asp">List Language</a></li>
-                            <li><a href="ListMajor.asp">List Major</a></li>
-                            <li><a href="ListMaritalStatus.asp">List Marital Status</a></li>
-                            <li><a href="ListNationality.asp">List Nationality</a></li>
-                            <li><a href="ListOccupation.asp">List Occupation</a></li>
-                            <li><a href="ListQualification.asp">List Qualifications</a></li>
-                            <li><a href="ListReligion.asp">List Religion</a></li>
-                            <li><a href="ListRoom.asp">List Room</a></li>
-                            <li><a href="ListTechnicalQualification.asp">List Technical Qualifications</a></li>
-                            <li><a href="ListTimeSlot.asp">List Time Slot</a></li>
-                        </ul>
+                    <% if Session("SUserRoleId") = 1 then %>
+                    <li>
+                        <a href="Admin.asp">Admin</a>
+                    </li>
+                    <% end if %>
+
+                    <li>
+                        <a href="Reports.asp">Reports</a>
                     </li>
 
                     <li>
@@ -74,6 +61,8 @@
         <span><% response.write("Welcome to Training Management System") %></span>
         <span><img src="Images/seperator.png" alt="" width="16px" height="16px" style="margin: auto;"></span>
         <span><% response.write("User Name : " & Session("SUserName"))%></span>
+        <span><img src="Images/seperator.png" alt="" width="16px" height="16px" style="margin: auto;"></span>
+        <span><% response.write("User Role : " & Session("SUserRole"))%></span>
         <span><img src="Images/seperator.png" alt="" width="16px" height="16px" style="margin: auto;"></span>
         <span><% response.write("User Email : " & Session("SUserEmail")) %></span>
         <span><img src="Images/seperator.png" alt="" width="16px" height="16px" style="margin: auto;"></span>

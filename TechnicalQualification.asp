@@ -21,6 +21,7 @@
         Dim RSMajor
     'end
 
+if Session("SUserRoleId") <> 2 then
     if request.QueryString("Action")="1" then   'Action:1 = Add Technical Qualification
         call InsertTech()
     elseif request.QueryString("Action")="2" AND request.QueryString("EditForm")="true" then    'Action:2, EditForm:True = Fill Edit Technical Qualification
@@ -40,7 +41,7 @@
     elseif request.QueryString("Action")="3" then
         call DelTech()
     end if
-
+end if
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -100,6 +101,7 @@
 
             <br>
 
+            <% if Session("SUserRoleId") <> 2 then %>
             <% if request.QueryString("Action")="2" AND request.QueryString("EditForm")="true" then %>
             <div class="panel">
                 <div class="panel-head">
@@ -386,6 +388,7 @@
                 </div>
             </div>
             <% end if %>
+            <% end if %>
 
             <%
                 Dim RSStdTechQual
@@ -420,6 +423,7 @@
                         <tbody>
                             <% do while NOT RSStdTechQual.EOF %>
                             <tr>
+                                <% if Session("SUserRoleId") <> 2 then %>
                                 <td>
                                     <a
                                         href="TechnicalQualification.asp?QsStdId=<% response.write(StdId) %>&Action=2&EditForm=true&QsTechQualificationId=<% response.write(RSStdTechQual("TechQualificationId")) %>">
@@ -432,6 +436,10 @@
                                         <img src="Images/delete.png" alt="" width="20px" height="20px">
                                     </a>
                                 </td>
+                                <% else %>
+                                <td></td>
+                                <td></td>
+                                <% end if %>
                                 <td class="qualf"><% response.write(RSStdTechQual("TechnicalQualifications")) %></td>
                                 <td class="major"><% response.write(RSStdTechQual("Major")) %></td>
                                 <td class="inst"><% response.write(RSStdTechQual("InstituteName")) %></td>

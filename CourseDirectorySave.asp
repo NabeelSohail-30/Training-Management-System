@@ -1,6 +1,7 @@
 <!--#include file=OpenDbConn.asp-->
 <!--#include file=ReValidateLogin.asp-->
 <%
+if Session("SUserRoleId") <> 2 then
     'Variable Declaration
         dim mCourseId
         dim mStartDate
@@ -352,4 +353,8 @@ Function IsInstructorConflict()
     set RSFilterRec = Nothing
     IsInstructorConflict = IsConflict
 end function
+
+else
+response.redirect("dashboard.asp")
+end if
 %>

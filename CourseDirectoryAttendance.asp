@@ -109,6 +109,7 @@ RSAttendanceList.Open QryStr, conn
     'response.write(AttendanceCount)
 'End
 
+if Session("SUserRoleId") <> 2 then
 'Insert Attendance Module Start
 if request.form("FormCourseDirectoryId") <> "" then
     CourseDirectoryId = request.form("FormCourseDirectoryId")
@@ -240,7 +241,7 @@ end if
 'End of Module
 
 'Deleting Attendance Module Start
-if request.QueryString("QsDelete")= "1" then
+if request.QueryString("QsDelete") = "1" AND Request.QueryString("QsId") <> "" AND Request.QueryString("QsDate") <> "" then
     'Deleting Records in Db
         QryStr = "DELETE StdAtt " &_
                 "FROM dbo.StudentEnrollment INNER JOIN dbo.StudentAttendance StdAtt ON " &_
@@ -313,7 +314,7 @@ if request.QueryString("QsUpdate")= "1" then
     'end
 
     response.redirect("CourseDirectoryAttendance.asp?QsId=" & CourseDirectoryId)
-
+end if
 end if
 'End
 
@@ -327,7 +328,7 @@ end if
     <link rel="stylesheet" href="CSS/bootstrap.css">
     <link rel="stylesheet" href="CSS/GlobalStyle.css">
     <link rel="stylesheet" href="CSS/StyleAddCourseDir.css">
-    <title>View Course Directory</title>
+    <title>Course Directory Attendance</title>
 </head>
 
 <body>
@@ -372,6 +373,7 @@ end if
                 </div>
             </div>
 
+            <% if Session("SUserRoleId") <> 2 then %>
             <% if AttendanceCount >= CourseDuration AND mCourseDirectoryStatus = 1 then %>
             <div>
                 <form action="CourseDirectoryAttendance.asp?QsUpdate=1&QsId=<% response.Write(CourseDirectoryId) %>"
@@ -390,6 +392,7 @@ end if
                     </div>
                 </form>
             </div>
+            <% end if %>
             <% end if %>
 
             <div class="panel">
@@ -521,6 +524,7 @@ end if
                 </div>
             </div>
 
+            <% if Session("SUserRoleId") <> 2 then %>
             <% if Now() >= cdate(mStartDate) then %>
             <% if cint(mCourseDirectoryStatus) = 1 then %>
             <% if AttendanceCount < CourseDuration then %>
@@ -601,11 +605,11 @@ end if
 
                             <tbody>
                                 <%
-                                    Dim Counter
-                                    Counter = 1
+                                        Dim Counter
+                                        Counter = 1
 
-                                    do while NOT RSAttendanceList.EOF
-                                    %>
+                                        do while NOT RSAttendanceList.EOF
+                                        %>
 
                                 <tr>
                                     <td><% response.Write(RSAttendanceList("StdGrNumber")) %></td>
@@ -636,13 +640,13 @@ end if
                                 </tr>
 
                                 <%
-                                                        Counter = Counter + 1
-                                                        RSAttendanceList.MoveNext
-                                                        loop
+                                                            Counter = Counter + 1
+                                                            RSAttendanceList.MoveNext
+                                                            loop
 
-                                                        RSAttendanceList.close
-                                                        set RSAttendanceList = Nothing
-                                                        %>
+                                                            RSAttendanceList.close
+                                                            set RSAttendanceList = Nothing
+                                                            %>
                             </tbody>
                         </table>
                         <input type="hidden" value="<% response.Write(Counter - 1) %>" name="FormCounter">
@@ -680,6 +684,7 @@ end if
                     <h2>This Course Directory is not Started Yet</h2>
                 </div>
             </div>
+            <% end if %>
             <% end if %>
 
             <div class="panel">
@@ -720,6 +725,7 @@ end if
                                 <td><% response.Write(RSAttendance("CourseDirectoryId")) %></td>
                                 <td><% response.Write(RSAttendance("AttendanceDate")) %></td>
                                 <td><% response.Write(RSAttendance("AttendanceCount")) %></td>
+                                <% if Session("SUserRoleId") <> 2 then %>
                                 <td>
                                     <a
                                         href="CourseDirectoryAttendance.asp?QsEdit=1&QsId=<% response.write(CourseDirectoryId) %>&QsDate=<% response.write(RSAttendance("AttendanceDate")) %>"><img
@@ -733,6 +739,10 @@ end if
                                             title="Delete Attendance"
                                             onclick="return (confirm('Do you want to Delete this Attendance?'));"></a>
                                 </td>
+                                <% else %>
+                                <td></td>
+                                <td></td>
+                                <% end if %>
                             </tr>
 
                             <%
@@ -747,6 +757,7 @@ end if
                 </div>
             </div>
 
+            <% if Session("SUserRoleId") <> 2 then %>
             <% if Request.QueryString("QsEdit")="1" AND Request.QueryString("QsId")<>"" AND Request.QueryString("QsDate")<>"" then %>
             <form action="CourseDirectoryAttendance.asp?QsUpdate=2&QsId=<% response.Write(CourseDirectoryId) %>"
                 method="POST">
@@ -849,6 +860,7 @@ end if
                     </div>
                 </div>
             </form>
+            <% end if %>
             <% end if %>
         </div>
     </div>
